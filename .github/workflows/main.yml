@@ -13,9 +13,9 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-
           MYSQL_DATABASE: laravel
           MYSQL_USER: root
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_PASSWORD: root
 
         ports:
