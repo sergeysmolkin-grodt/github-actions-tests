@@ -12,14 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+
         run: vendor/bin/phpunit
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        env:
-          TEST_NAME: Scarlett
-        with:
-          bootstrap: autoload.php
-          configuration: phpunit.xml
-          args: --coverage-text
+
+
+
+
+
+
 
