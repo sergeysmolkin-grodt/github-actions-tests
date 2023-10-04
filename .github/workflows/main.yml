@@ -47,7 +47,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Run migrations and seeders
-        run: php artisan migrate:fresh --seed --force
+        run: sail artisan migrate:fresh --seed --force
 
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
