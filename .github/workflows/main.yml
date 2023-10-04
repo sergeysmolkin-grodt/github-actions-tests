@@ -13,10 +13,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3n--user
+        uses: php-actions/phpunit@v3
+        env:
+          TEST_NAME: Scarlett
         with:
-          version: 9.5.26
-          php_extensions: xdebug
           bootstrap: vendor/autoload.php
           configuration: test/phpunit.xml
           args: --coverage-text
