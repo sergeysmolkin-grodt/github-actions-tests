@@ -1,0 +1,169 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 13, 2019, 6:47:00 PM
+    Author     : ABC
+*/
+
+
+.btn-primary:active, .btn-primary:focus {
+    border-color: #28aae1 !important;
+    background-color: #28aae1 !important;
+    color: #FFF!important;
+}
+
+.img-circular {
+    width: 150px;
+    height: 150px;
+    background-size: cover;
+    display: block;
+    border-radius: 100px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+}
+
+.login-background {
+    background-color: #ffffff;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.main-menu.menu-dark .navigation>li .active>a {
+    color: #F6F6F6;
+    font-weight: 700;
+    background: #121B22;
+    border-right: 4px solid #28aae1;
+}
+.customizer a.customizer-toggle {
+    display: none;
+}
+
+.card-footer {
+    padding: 0.6rem !important;
+    border-top: 1px solid rgba(0,0,0,.06);
+}
+
+.btn-primary{
+    background-color:#28aae1 !important;
+    color:#ffffff !important;
+    border-color: #28aae1 !important;
+}
+
+.btn-theme{
+    background-color:#28aae1 !important;
+    color:#ffffff !important;
+}
+
+.btn-primary:hover {
+    border-color: #28aae1 !important;
+    background-color: #28aae1 !important;
+    color: #FFF!important;
+}
+
+.header-navbar .navbar-header {
+    width: 240px;
+    height: 4.57rem;
+    float: left;
+    position: relative;
+    padding: 0 -0.15rem !important;
+    transition: .3s ease all;
+}
+
+/* CODE START FOR RATINGS */
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+fieldset, label { margin: 0; padding: 0; }
+h1 { font-size: 1.5em; margin: 10px; }
+
+/****** Style Star Rating Widget *****/
+
+.rating { 
+    border: none;
+    float: left;
+}
+
+.rating > input { display: none; } 
+.rating > label:before { 
+    margin: 5px;
+    font-size: 1.25em;
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f005";
+}
+
+.rating > .half:before { 
+    content: "\f089";
+    position: absolute;
+}
+
+.rating > label { 
+    color: #ddd; 
+    float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+
+.rating > input:checked ~ label, /* show gold star when clicked */
+.rating:not(:checked), /* hover current star */
+.rating:not(:checked) > label:hover ~ label { color: #28aae1;  } /* hover previous stars in list */
+
+/*.rating > input:checked + label:hover,  hover current star when changing rating */
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label, /* lighten current selection */
+.rating > input:checked ~ label:hover ~ label { color: #28aae1;  } 
+
+
+/*.rating > input:checked ~ label,  show gold star when clicked 
+.rating:not(:checked) > label:hover,  hover current star 
+.rating:not(:checked) > label:hover ~ label { color: #28aae1;  }  hover previous stars in list 
+
+.rating > input:checked + label:hover,  hover current star when changing rating 
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,  lighten current selection 
+.rating > input:checked ~ label:hover ~ label { color: #28aae1;  } */
+
+.ms-options-wrap > .ms-options > ul label {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding: 0px 4px;
+    margin: 1px 0;
+}
+
+.ms-options > ul{
+    list-style-type:none !important;
+    padding: 7px !important;
+}
+
+.ms-options-wrap > button:focus, .ms-options-wrap > button {
+    position: relative;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #cccbcb;
+    background-color: #fff;
+    padding: 10px 20px 10px 5px;
+    margin-top: 1px;
+    font-size: 13px;
+    color: #545454;
+    outline: none;
+    white-space: nowrap;
+    border-radius: .21rem;
+    padding-left: 18px;
+}
+
+.ms-options-wrap > .ms-options > ul input[type="checkbox"] {
+    margin-right: 5px;
+    position: absolute;
+    left: 0px;
+    top: 2px !important;
+}
+
+.main-menu.menu-dark .navigation li a span {
+     display: contents; 
+}
