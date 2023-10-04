@@ -14,5 +14,5 @@ jobs:
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
-      - run: vendor/bin/phpunit
+      - run: ./vendor/bin/phpunit
 
