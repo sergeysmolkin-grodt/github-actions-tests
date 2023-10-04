@@ -12,10 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - uses: php-actions/composer@v5
-        with:
-          dev: no
-          args: --profile --ignore-platform-reqs
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
