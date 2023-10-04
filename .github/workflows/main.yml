@@ -12,7 +12,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - uses: php-actions/composer@v6
+      - name: Dependencies
+        uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
                 --ignore-platform-req=ext-zip
