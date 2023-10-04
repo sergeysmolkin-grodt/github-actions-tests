@@ -54,8 +54,6 @@ jobs:
           args: --ignore-platform-req=ext-gd
                 --ignore-platform-req=ext-zip
 
-      - name: Directory Permissions
-        run: chmod -R 777 storage bootstrap/cache
 
       - name: Generate app key
         run: php artisan key:generate
