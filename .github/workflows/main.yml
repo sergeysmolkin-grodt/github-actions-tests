@@ -15,8 +15,7 @@ jobs:
       - uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
-                 --ignore-platform-req=ext-zip
-
+                --ignore-platform-req=ext-zip
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
