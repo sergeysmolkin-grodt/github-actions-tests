@@ -12,6 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
       - run: vendor/bin/phpunit
 
