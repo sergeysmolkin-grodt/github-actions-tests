@@ -42,7 +42,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`${MAIN_DOMAIN}`) || Host(`www.${MAIN_DOMAIN}`)"
       - "traefik.http.routers.app.tls=true"
-      - "traefik.http.routers.app.tls.certresolver=lets-encrypt"   
+      - "traefik.http.routers.app.tls.certresolver=lets-encrypt"
     depends_on:
       - db
 
@@ -53,7 +53,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_USER: ${DB_USERNAME}
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
@@ -77,6 +77,6 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.pma.rule=Host(`${PMA_DOMAIN}`)"
       - "traefik.http.routers.pma.tls=true"
-      - "traefik.http.routers.pma.tls.certresolver=lets-encrypt"   
+      - "traefik.http.routers.pma.tls.certresolver=lets-encrypt"
     depends_on:
       - db
