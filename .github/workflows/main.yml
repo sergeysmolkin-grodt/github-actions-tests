@@ -1,23 +1,31 @@
-name: CI
-
-on: [push]
+name: Production_deploy
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build-test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: php-actions/composer@v5
+        with:
+          dev: no
+          args: --profile --ignore-platform-reqs
+
+      - name: PHPUnit Tests
+        uses: php-actions/phpunit@v3
+        with:
+          version: 9.6
+          php_version: 8.1
+          bootstrap: vendor/autoload.php
+          configuration: phpunit.xml
+          args: --coverage-text
       - run: vendor/bin/phpunit
-
-
-
-
-
-
-
-
 
 
 
