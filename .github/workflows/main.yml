@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
+        run: vendor/bin/phpunit
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
         env:
@@ -20,4 +20,4 @@ jobs:
           bootstrap: autoload.php
           configuration: phpunit.xml
           args: --coverage-text
-        run: vendor/bin/phpunit
+
