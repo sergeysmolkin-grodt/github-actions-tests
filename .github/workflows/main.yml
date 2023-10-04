@@ -22,9 +22,9 @@ jobs:
           sudo systemctl enable mysql.service
           sudo systemctl start mysql.service
           echo -e "Creating Laravel Database\n"
-          mysql --host 127.0.0.1 -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS laravel;'
+          mysql --host localhost:3306 -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS laravel;'
           echo -e "Check new settings\n"
-          mysql --host 127.0.0.1 -uroot -proot -e "SELECT @@global.secure_file_priv, @@global.local_infile"
+          mysql --host localhost:3306 -uroot -proot -e "SELECT @@global.secure_file_priv, @@global.local_infile"
         working-directory: .
 
 
