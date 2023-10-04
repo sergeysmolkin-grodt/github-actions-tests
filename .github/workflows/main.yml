@@ -12,12 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        with:
-          version: 9.6
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
-          args: --coverage-text
+
       - run: vendor/bin/phpunit
 
