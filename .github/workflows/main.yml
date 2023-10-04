@@ -17,7 +17,7 @@ jobs:
         uses: php-actions/phpunit@v3
         with:
           version: 9.6
-          bootstrap: vendor/bin/autoload.php
+          bootstrap: vendor/autoload.php
           configuration: phpunit.xml
           args: --coverage-text
       - run: vendor/bin/phpunit
