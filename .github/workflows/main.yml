@@ -13,6 +13,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
+          MYSQL_HOST: db
           MYSQL_DATABASE: laravel
           MYSQL_ROOT_USER: root
           MYSQL_ROOT_PASSWORD: root
@@ -58,7 +59,7 @@ jobs:
         run: php artisan key:generate
 
       - name: Permissions
-        run: docker exec app chmod -R 777 storage
+        run: docker exec app chmod -R 755 storage
 
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
