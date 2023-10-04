@@ -20,3 +20,4 @@ jobs:
           bootstrap: autoload.php
           configuration: phpunit.xml
           args: --coverage-text
+        run: vendor/bin/phpunit
