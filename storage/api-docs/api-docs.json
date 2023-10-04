@@ -1,0 +1,931 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "iFal API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/": {},
+        "/api/appointments": {
+            "post": {
+                "tags": [
+                    "Appointments"
+                ],
+                "summary": "Create a new appointment",
+                "description": "This endpoint creates a new appointment. The following are the conditions required to book an appointment.\n *     In the teacher_options table, the can_be_booked field for teacher must be set to 1\n *     In the users table, both the teacher and the student must have their is_active field set to 1\n *     The appointment date cannot be set to a time that has already passed\n *     The teacher must have an record in the availability table for the date being booked, also is_available field in that table must also be set to 1",
+                "requestBody": {
+                    "description": "Appointment data that needs to be created",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "teacherId": {
+                                        "description": "The ID of the teacher for the appointment. Must be a valid teacher ID.",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "date": {
+                                        "description": "The date of the appointment in YYYY-MM-DD format. Cannot be a past date.",
+                                        "type": "string",
+                                        "example": "2023-09-15"
+                                    },
+                                    "startTime": {
+                                        "description": "The start time of the appointment in HH:mm format. Must be during teacher's working hours.",
+                                        "type": "string",
+                                        "example": "16:00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Success message",
+                                            "type": "string",
+                                            "example": "Your session booked successfully"
+                                        },
+                                        "appointmentId": {
+                                            "description": "The ID of the newly created appointment",
+                                            "type": "integer",
+                                            "example": 1
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auto-schedule-time": {
+            "post": {
+                "tags": [
+                    "Auto Schedule"
+                ],
+                "summary": "Create a new auto-schedule entry",
+                "description": "Create a new auto-schedule entry with date and time details",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "autoScheduleDate": {
+                                        "description": "The date for which the auto-schedule is set",
+                                        "type": "string",
+                                        "example": "2023-09-21"
+                                    },
+                                    "timeDetails": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "teacherId": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "day": {
+                                                    "type": "string",
+                                                    "example": "monday"
+                                                },
+                                                "time": {
+                                                    "type": "string",
+                                                    "example": "12:00"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Auto-schedule created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Auto schedule set successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Register Users",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "firstname": {
+                                        "type": "string",
+                                        "example": "Anna"
+                                    },
+                                    "lastname": {
+                                        "type": "string",
+                                        "example": "Ivanova"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "a.ivanova123@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "pass123"
+                                    },
+                                    "mobile": {
+                                        "type": "string",
+                                        "example": "+380661234567"
+                                    },
+                                    "ageGroup": {
+                                        "type": "string",
+                                        "example": "adult"
+                                    },
+                                    "birthDate": {
+                                        "type": "string",
+                                        "example": "1990-06-15"
+                                    },
+                                    "gender": {
+                                        "type": "string",
+                                        "example": "female"
+                                    },
+                                    "loginType": {
+                                        "type": "string",
+                                        "example": "NORMAL"
+                                    },
+                                    "countryCode": {
+                                        "type": "string",
+                                        "example": "UA"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "student"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Created User object",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "firstname": {
+                                            "type": "string",
+                                            "example": "Anna"
+                                        },
+                                        "lastname": {
+                                            "type": "string",
+                                            "example": "Ivanova"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "a.ivanova123@gmail.com"
+                                        },
+                                        "profile_image": {
+                                            "type": "string",
+                                            "nullable": true
+                                        },
+                                        "is_active": {
+                                            "type": "boolean",
+                                            "nullable": true
+                                        },
+                                        "deleted_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "nullable": true
+                                        },
+                                        "email_verified_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "nullable": true
+                                        },
+                                        "remember_token": {
+                                            "type": "string",
+                                            "nullable": true
+                                        },
+                                        "role": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 5
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "student"
+                                                    },
+                                                    "guard_name": {
+                                                        "type": "string",
+                                                        "example": "web"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-09-11T07:16:56.000000Z"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time",
+                                                        "example": "2023-09-11T07:16:56.000000Z"
+                                                    },
+                                                    "pivot": {
+                                                        "properties": {
+                                                            "model_id": {
+                                                                "type": "integer",
+                                                                "example": 5
+                                                            },
+                                                            "role_id": {
+                                                                "type": "integer",
+                                                                "example": 5
+                                                            },
+                                                            "model_type": {
+                                                                "type": "string",
+                                                                "example": "App\\\\Models\\\\User"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login Users",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "a.ivanova123@gmail.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "pass123"
+                                    },
+                                    "loginType": {
+                                        "type": "string",
+                                        "example": "NORMAL"
+                                    },
+                                    "deviceType": {
+                                        "type": "string",
+                                        "example": "tablet",
+                                        "nullable": true
+                                    },
+                                    "OSVersion": {
+                                        "type": "string",
+                                        "example": "16.2",
+                                        "nullable": true
+                                    },
+                                    "deviceToken": {
+                                        "type": "string",
+                                        "example": "mbiDmobMRlhnDYMZa9",
+                                        "nullable": true
+                                    },
+                                    "brand": {
+                                        "type": "string",
+                                        "example": "Apple",
+                                        "nullable": true
+                                    },
+                                    "model": {
+                                        "type": "string",
+                                        "example": "iPhone 11",
+                                        "nullable": true
+                                    },
+                                    "deviceId": {
+                                        "type": "string",
+                                        "example": "5893590235803",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logged in User object and Created API Token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "1|laravel_sanctum_hBEi8VPgE28bXfmYhjjRcF0stKod4Aqn6lkt6egW4945d232"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/request-verification": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Request a verification code",
+                "description": "Sends a verification code to the given phone number",
+                "operationId": "sendVerificationCode",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "phone_number"
+                                ],
+                                "properties": {
+                                    "phone_number": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "+380685469492"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Verification code has been sent"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The phone number field format is invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/verify-code": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Verify the code sent to the phone",
+                "description": "Verifies the code sent to the phone number",
+                "operationId": "verifyCode",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "phone_number",
+                                    "code"
+                                ],
+                                "properties": {
+                                    "phone_number": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "+380689269492"
+                                    },
+                                    "code": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Phone number verified successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid code"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/logout": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Log out",
+                "description": "Logs out the current user by invalidating the token",
+                "operationId": "logoutUser",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/auth/forgot-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Forgot Password",
+                "description": "Sends a password reset link to the provided email",
+                "operationId": "forgotPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "description": "The email of the user",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "We have emailed your password reset link."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "We can't find a user with that email address."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/reset-password": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Reset Password",
+                "description": "Resets the user's password using a valid reset token",
+                "operationId": "resetPassword",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "description": "Password reset token",
+                                        "type": "string",
+                                        "example": "sometoken"
+                                    },
+                                    "email": {
+                                        "description": "The email of the user",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "description": "The new password",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newPassword123"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "The new password confirmation",
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "newPassword123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Your password has been reset."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "This password reset token is invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get list of users with optional filters",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filter users by email",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filter users by phone",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "Filter users by role (e.g., teacher)",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "teacher",
+                                "student",
+                                "manager"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "time_availability",
+                        "in": "query",
+                        "description": "Filter teachers by time of day. Applicable if role is 'teacher'.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "morning",
+                                "afternoon",
+                                "evening"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "day_availability",
+                        "in": "query",
+                        "description": "Filter teachers by availability days. Applicable if role is 'teacher'.",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "monday",
+                                    "tuesday",
+                                    "wednesday",
+                                    "thursday",
+                                    "friday",
+                                    "saturday",
+                                    "sunday"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "name": "gender",
+                        "in": "query",
+                        "description": "Filter teachers by gender. Applicable if role is 'teacher'.",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "male",
+                                "female"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/User"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "firstname": {
+                        "type": "string",
+                        "example": "Anna"
+                    },
+                    "lastname": {
+                        "type": "string",
+                        "example": "Ivanova"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "a.ivanova123@gmail.com"
+                    },
+                    "profile_image": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "email_verified_at": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "remember_token": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "role": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Role"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Role": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "student"
+                    },
+                    "guard_name": {
+                        "type": "string",
+                        "example": "web"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2023-09-12T05:33:27.000000Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2023-09-12T05:33:27.000000Z"
+                    },
+                    "pivot": {
+                        "properties": {
+                            "model_id": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "role_id": {
+                                "type": "integer",
+                                "example": 5
+                            },
+                            "model_type": {
+                                "type": "string",
+                                "example": "App\\\\Models\\\\User"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Laravel Sanctum Bearer Token",
+                "name": "Bearer",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

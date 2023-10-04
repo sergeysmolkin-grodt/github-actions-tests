@@ -1,0 +1,22 @@
+[log]
+  level = "DEBUG"
+
+[api]
+  dashboard = true
+
+[providers]
+  [providers.docker]
+    exposedByDefault = false
+  [providers.file]
+    directory = "/etc/traefik/dynamic"
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+  [entryPoints.https]
+    address = ":443"
+
+[certificatesResolvers.lets-encrypt.acme]
+  storage = "/etc/traefik/acme.json"
+  email = "info@leasoft.org"
+  [certificatesResolvers.lets-encrypt.acme.tlsChallenge]

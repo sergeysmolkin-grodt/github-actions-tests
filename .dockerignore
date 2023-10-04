@@ -1,0 +1,31 @@
+#main app
+storage/app/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+vendor/
+
+#teacher app
+teacher/storage/app/*
+teacher/storage/framework/cache/*
+teacher/storage/framework/sessions/*
+teacher/storage/framework/views/*
+teacher/storage/logs/*
+teacher/vendor/
+
+#git
+**.git
+**.gitignore
+
+#IDE
+.idea
+
+#docker
+docker/Dockerfile
+docker-compose.yml
+
+#other files
+wdrmqvjykz.sql
+./student/student.zip
+./teacher/storage.zip

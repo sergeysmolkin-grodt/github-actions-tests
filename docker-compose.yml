@@ -1,0 +1,82 @@
+version: "3.8"
+
+volumes:
+  mysql_data_new:
+
+networks:
+  ifal:
+    driver: bridge
+
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:2.10
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - ifal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./docker/traefik:/etc/traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`${TRAEFIK_DOMAIN}`)"
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+  app:
+    build:
+      context: .
+      target: development-stage
+      dockerfile: docker/Dockerfile
+    container_name: app
+    restart: always
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - ifal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`${MAIN_DOMAIN}`) || Host(`www.${MAIN_DOMAIN}`)"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.routers.app.tls.certresolver=lets-encrypt"   
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    hostname: ${DB_HOST}
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data_new:/var/lib/mysql
+    networks:
+      - ifal
+    labels:
+      - "traefik.enable=false"
+
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    restart: always
+    environment:
+      - PMA_HOST=${DB_HOST}
+      - PMA_PORT=3306
+      - PMA_ARBITRARY=1
+    networks:
+      - ifal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pma.rule=Host(`${PMA_DOMAIN}`)"
+      - "traefik.http.routers.pma.tls=true"
+      - "traefik.http.routers.pma.tls.certresolver=lets-encrypt"   
+    depends_on:
+      - db
