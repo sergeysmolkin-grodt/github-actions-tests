@@ -57,7 +57,7 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Permissions
+      - name: Permissionss
         run: chmod -R 777 storage
 
       - name: Run migrations and seeders
