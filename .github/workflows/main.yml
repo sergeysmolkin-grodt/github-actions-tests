@@ -12,6 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - uses: php-actions/composer@v5
+        with:
+          dev: no
+          args: --profile --ignore-platform-reqs
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
@@ -21,6 +25,7 @@ jobs:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
           args: --coverage-text
+
       - run: vendor/bin/phpunit
 
 
