@@ -14,6 +14,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Dependencies
+        uses: php-actions/composer@v6
+        with:
+          args: --ignore-platform-req=ext-gd
+                --ignore-platform-req=ext-zip
+                --ignore-platform-req=ext-zip
+
       - name: Generate app key
         run: php artisan key:generate
 
@@ -23,18 +30,9 @@ jobs:
       - name: Update composer
         run: composer dump-autoload
 
-      - name: Dependencies
-        uses: php-actions/composer@v6
-        with:
-          args: --ignore-platform-req=ext-gd
-                --ignore-platform-req=ext-zip
-                --ignore-platform-req=ext-zip
-
       - name: Build and run Docker containers
         run: docker-compose -f docker-compose.dev.yml up -d
         working-directory: .
-
-
 
       - name: Permissions for storage
         run: docker exec app_new chmod -R 777 storage
