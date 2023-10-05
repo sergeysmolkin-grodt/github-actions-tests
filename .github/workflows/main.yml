@@ -46,17 +46,6 @@ jobs:
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
 
-      - name: Create and migrate the database
-        run: |
-            php artisan migrate
-            php artisan db:seed
-          env:
-            DB_HOST: localhost
-            DB_PORT: 3306
-            DB_DATABASE: root
-            DB_USERNAME: root
-            DB_PASSWORD: root
-
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
         with:
