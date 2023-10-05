@@ -50,17 +50,20 @@ jobs:
         run: cp .env.example .env
 
       - name: Dependencies
-        run: composer install --prefer-dist --no-progress
+        uses: composer install --prefer-dist --no-progress
+        with:
+            args: --ignore-platform-req=ext-gd
+                  --ignore-platform-req=ext-zip
 
 
       - name: Generate app key
         run: php artisan key:generate
 
       - name: Permissions
-        run: docker exec app chmod -R 777 storage
+        run: docker exec app_new chmod -R 777 storage
 
       - name: Run migrations and seeders
-        run: php artisan migrate:fresh --seed --force
+        run: docker exec app_new artisan migrate:fresh --seed --force
 
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
