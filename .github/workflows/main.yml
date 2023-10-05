@@ -43,7 +43,7 @@ jobs:
         run: docker exec app_new chmod -R 777 storage
 
       - name: Run migrations and seeders
-        run: php artisan migrate:fresh --seed --force
+        run: docker exec app_new artisan migrate:fresh --seed --force
         env:
             DB_HOST: db
             DB_PORT: 3306
