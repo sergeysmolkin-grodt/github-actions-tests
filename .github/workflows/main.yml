@@ -55,12 +55,10 @@ jobs:
             args: --ignore-platform-req=ext-gd
                   --ignore-platform-req=ext-zip
 
-
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Permissions
-        run: docker exec app_new chmod -R 777 storage
+
 
       - name: Run migrations and seeders
         run: docker exec app_new artisan migrate:fresh --seed --force
