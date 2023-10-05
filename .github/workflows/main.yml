@@ -51,9 +51,7 @@ jobs:
 
       - name: Dependencies
         run: composer install --prefer-dist --no-progress
-        with:
-          args: --ignore-platform-req=ext-gd
-                --ignore-platform-req=ext-zip
+
 
       - name: Generate app key
         run: php artisan key:generate
