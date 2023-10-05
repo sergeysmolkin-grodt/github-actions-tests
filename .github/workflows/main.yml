@@ -10,22 +10,20 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
 
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Build and run Docker containers
-        run: docker-compose -f docker-compose.dev.yml up -d
-        working-directory: .
 
       - name: Dependencies
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
             --ignore-platform-req=ext-zip
-            --prefer-dist
-            --no-progress
+
+
+      - name: Build and run Docker containers
+        run: docker-compose -f docker-compose.dev.yml up -d
+        working-directory: .
 
       - name: Copy .env
         run: cp .env.example .env
