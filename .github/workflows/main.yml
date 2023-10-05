@@ -19,13 +19,13 @@ jobs:
         with:
           args: --ignore-platform-req=ext-gd
                 --ignore-platform-req=ext-zip
-                --ignore-platform-req=ext-zip
 
-      - name: Generate app key
-        run: php artisan key:generate
 
       - name: Copy .env
         run: cp .env.example .env
+
+      - name: Generate app key
+        run: php artisan key:generate
 
       - name: Update composer
         run: composer dump-autoload
