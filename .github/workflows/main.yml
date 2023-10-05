@@ -39,7 +39,8 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
-
+      - name: Permissions for storage
+        run: docker exec app_new chmod -R 777 storage
 
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
