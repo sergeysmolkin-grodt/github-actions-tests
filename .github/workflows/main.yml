@@ -18,9 +18,8 @@ jobs:
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
-            --ignore-platform-req=ext-zip
-
-
+                --ignore-platform-req=ext-zip
+                --ignore-platform-req=ext-zip
       - name: Build and run Docker containers
         run: docker-compose -f docker-compose.dev.yml up -d
         working-directory: .
@@ -42,9 +41,6 @@ jobs:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
 
-
-      - name : Additional runner
-        run: vendor/bin/phpunit
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: php artisan test --parallel
