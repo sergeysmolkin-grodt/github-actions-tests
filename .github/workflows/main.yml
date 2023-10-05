@@ -21,7 +21,6 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -36,6 +35,7 @@ jobs:
         with:
             args: --ignore-platform-req=ext-gd
                   --ignore-platform-req=ext-zip
+
       - name: Generate app key
         run: php artisan key:generate
 
@@ -44,13 +44,8 @@ jobs:
 
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
-
-      - name: Create and migrate the database
-        run: |
-            php artisan migrate
-            php artisan db:seed
         env:
-            DB_HOST: localhost
+            DB_HOST: db
             DB_PORT: 3306
             DB_DATABASE: laravel
             DB_USERNAME: root
