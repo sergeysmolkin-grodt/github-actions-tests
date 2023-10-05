@@ -28,8 +28,7 @@ jobs:
       - name: Build and run Docker containers
         run: docker-compose -f docker-compose.dev.yml up -d
 
-      - name: Copy .env
-        run: cp .env.example .env
+
 
       - name: Dependencies
         uses: php-actions/composer@v6
