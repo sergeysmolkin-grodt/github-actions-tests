@@ -50,7 +50,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Dependencies
-        uses: composer install --prefer-dist --no-progress
+        uses: php-actions/composer@v6
         with:
             args: --ignore-platform-req=ext-gd
                   --ignore-platform-req=ext-zip
