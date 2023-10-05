@@ -10,6 +10,16 @@ jobs:
     name: Build & Test
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
 
       - name: Checkout code
@@ -35,6 +45,17 @@ jobs:
 
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
+
+      - name: Create and migrate the database
+        run: |
+            php artisan migrate
+            php artisan db:seed
+          env:
+            DB_HOST: localhost
+            DB_PORT: 3306
+            DB_DATABASE: root
+            DB_USERNAME: root
+            DB_PASSWORD: root
 
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
