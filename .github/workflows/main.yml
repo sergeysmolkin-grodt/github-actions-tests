@@ -16,6 +16,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: laravel
+          MYSQL_DB_HOST: db
+          MYSQL_USER: root
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -40,12 +42,9 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Permissions for storage
-        run: docker exec app_new chmod -R 777 storage
 
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
-
 
       - name: Create and migrate the database
         run: |
