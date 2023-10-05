@@ -46,6 +46,7 @@ jobs:
       - name: Run migrations and seeders
         run: php artisan migrate:fresh --seed --force
 
+
       - name: Create and migrate the database
         run: |
             php artisan migrate
