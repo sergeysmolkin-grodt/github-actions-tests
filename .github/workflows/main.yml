@@ -50,12 +50,12 @@ jobs:
         run: |
             php artisan migrate
             php artisan db:seed
-          env:
+        env:
             DB_HOST: localhost
             DB_PORT: 3306
-            DB_DATABASE: ваша_база_данных
+            DB_DATABASE: laravel
             DB_USERNAME: root
-            DB_PASSWORD: ваш_пароль
+            DB_PASSWORD: root
 
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
