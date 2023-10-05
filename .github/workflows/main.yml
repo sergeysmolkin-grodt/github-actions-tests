@@ -14,6 +14,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Generate app key
+        run: php artisan key:generate
+
+      - name: Copy .env
+        run: cp .env.example .env
+
       - name: Update composer
         run: composer dump-autoload
 
@@ -23,15 +29,12 @@ jobs:
           args: --ignore-platform-req=ext-gd
                 --ignore-platform-req=ext-zip
                 --ignore-platform-req=ext-zip
+
       - name: Build and run Docker containers
         run: docker-compose -f docker-compose.dev.yml up -d
         working-directory: .
 
-      - name: Copy .env
-        run: cp .env.example .env
 
-      - name: Generate app key
-        run: php artisan key:generate
 
       - name: Permissions for storage
         run: docker exec app_new chmod -R 777 storage
