@@ -26,13 +26,12 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Permissions for storage
-        run: docker exec app_new chmod -R 777 storage
-
-
       - name: Build and run Docker containers
         run: docker-compose -f docker-compose.dev.yml up -d
         working-directory: .
+
+      - name: Permissions for storage
+        run: docker exec app_new chmod -R 777 storage
 
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
