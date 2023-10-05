@@ -61,7 +61,7 @@ jobs:
 
 
       - name: Run migrations and seeders
-        run: docker exec app_new artisan migrate:fresh --seed --force
+        run: php artisan migrate:fresh --seed --force
 
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
