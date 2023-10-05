@@ -23,22 +23,6 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: DB MySQL8 Setup
-        run: |
-          echo -e "Enable LOAD DATA LOCAL INFILE in my.cnf\n"
-          echo -e "SETTING secure-file-priv TO EMPTY STRING\n"
-          echo -e "[mysqld]\nsecure-file-priv=''" | sudo tee -a /etc/mysql/my.cnf
-          echo -e "SETTING local_infile TO ON\n"
-          echo -e "[mysqld]\nlocal_infile='ON'" | sudo tee -a /etc/mysql/my.cnf
-          echo -e "Start MYSQL service, it is off by default\n"
-          sudo systemctl enable mysql.service
-          sudo systemctl start mysql.service
-          echo -e "Creating Laravel Database\n"
-          mysql --host 127.0.0.1 -uroot -proot -e 'CREATE DATABASE IF NOT EXISTS laravel;'
-          echo -e "Check new settings\n"
-          mysql --host 127.0.0.1 -uroot -proot -e "SELECT @@global.secure_file_priv, @@global.local_infile"
-        working-directory: .
-
 
       - name: Checkout code
         uses: actions/checkout@v3
