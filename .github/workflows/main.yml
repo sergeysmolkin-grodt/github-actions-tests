@@ -39,7 +39,7 @@ jobs:
       - name: Execute PHPUnit Tests
         uses: php-actions/phpunit@v3
         with:
-          version: 9.6
+          version: 10.4
           php_version: 8.1
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
