@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Filesystem
+        run: composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies
+
       - name: Dependencies
         uses: php-actions/composer@v6
         with:
