@@ -10,7 +10,7 @@ use App\Http\Requests\API\SMSVerificationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\UserDetails;
-use App\Services\TwilloService;
+/*use App\Services\TwilloService;*/
 use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -27,13 +27,15 @@ class UserAuthenticationController extends Controller
     use \App\Traits\FileTrait;
 
     protected $authService;
-    protected TwilloService $twilloService;
+  /*  protected TwilloService $twilloService;*/
 
-    public function __construct(AuthService $authService, TwilloService $twilloService)
+    public function __construct(
+        AuthService $authService,
+       /** TwilloService $twilloService**/)
     {
         parent::__construct();
         $this->authService = $authService;
-        $this->twilloService = $twilloService;
+       /* $this->twilloService = $twilloService;*/
     }
 
     public function register(RegisterRequest $request): JsonResponse
