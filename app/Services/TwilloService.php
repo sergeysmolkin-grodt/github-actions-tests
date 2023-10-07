@@ -5,7 +5,7 @@ namespace App\Services;
 use Exception;
 use Twilio\Rest\Client;
 
-class TwilloService
+/*class TwilloService
 {
     private Client $twillo;
     private string $TWILIO_VERIFY_SID;
@@ -40,4 +40,4 @@ class TwilloService
         return true;
     }
 
-}
+}*/

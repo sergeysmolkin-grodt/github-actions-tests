@@ -25,7 +25,6 @@ class SubscriptionFactory extends Factory
             'is_paused' => 1,
             'start_date' => '2020-12-12',
             'end_date' => '2030-12-12',
-            'count_used_sessions' => '4'
         ];
     }
 }

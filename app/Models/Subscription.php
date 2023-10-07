@@ -21,6 +21,7 @@ class Subscription extends Model
         'is_pause',
         'start_date',
         'end_date',
+
     ];
 
     protected $hidden = [
