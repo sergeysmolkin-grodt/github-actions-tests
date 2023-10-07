@@ -203,6 +203,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Filesystem' => \Illuminate\Filesystem\Filesystem::class
     ])->toArray(),
 
     'age_groups' => [
