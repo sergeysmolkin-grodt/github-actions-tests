@@ -96,7 +96,7 @@ class AutoScheduleRepository implements AutoScheduleRepositoryInterface
 
     public function getIntersections(object $timeDetails): int|null
     {
-        dd($timeDetails);
+
         $timeSlots = explode(',', $timeDetails->time);
 
         return $this->model->where('teacher_id', $timeDetails->teacherId)
