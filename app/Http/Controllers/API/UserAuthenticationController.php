@@ -26,7 +26,7 @@ class UserAuthenticationController extends Controller
     use \App\Traits\FileTrait;
 
     protected $authService;
-    protected $twilloService;
+
 
     public function __construct(
         AuthService $authService)
