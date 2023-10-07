@@ -56,8 +56,8 @@ final class AppointmentTest extends TestCase
     public function testUserWhenStoresDoesntPassStudentExistenceInTheSystemCheck()
     {
         $appointment = array_merge(
-            TestCase::getAppointmentData($this->teacher,$this->user),[
-                'userId' => rand()
+            TestCase::getAppointmentData($this->teacher,$this->user), [
+               'userId' => rand()
         ]);
 
         $userId = $appointment['userId'];
