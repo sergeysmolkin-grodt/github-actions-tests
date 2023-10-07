@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use App\Services\AuthService;
-use Twilio\Rest\Client;
+
 
 class UserAuthenticationController extends Controller
 {
