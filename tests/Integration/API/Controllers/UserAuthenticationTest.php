@@ -92,7 +92,7 @@ final class UserAuthenticationTest extends TestCase
             'email' => $this->user->email
         ]));
 
-        $response->assertJson(['error' => 'Email is already exists']);
+        $response->assertJson(['error' => 'Email is already exist']);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
 
