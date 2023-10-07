@@ -7,7 +7,7 @@ use Twilio\Rest\Client;
 
 class TwilloService
 {
-    private Client $twillo;
+    /*private Client $twillo;
     private string $TWILIO_VERIFY_SID;
 
     public function __construct()
@@ -38,5 +38,5 @@ class TwilloService
             throw new Exception('Invalid code');
         }
         return true;
-    }
+    }*/
 }
