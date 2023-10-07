@@ -600,23 +600,34 @@ class AppointmentService
      */
     public function checkAppointmentCompatibility(Appointment $appointment, AvailabilityData $availability): bool
     {
-        if (!empty($availability->break_from_time) && !empty($availability->break_to_time) && $appointment->from >= $availability->break_from_time && $appointment->from < $availability->break_to_time) {
-            return false;
+        $appointmentTo = $appointment->to ? $this->getTimestamp($appointment->to) : null;
+        $appointmentFrom = $appointment->from ? $this->getTimestamp($appointment->from) : null;
+        $availabilityToTime = $availability->to_time ? $this->getTimestamp($availability->to_time) : null;
+        $availabilityFromTime = $availability->from_time ? $this->getTimestamp($availability->from_time) : null;
+        $availabilityBreakToTime = $availability->break_to_time ? $this->getTimestamp($availability->break_to_time) : null;
+        $availabilityBreakFromTime = $availability->break_from_time ? $this->getTimestamp($availability->break_from_time) : null;
+
+        if (!empty($availabilityBreakFromTime)) {
+            if ($appointmentFrom <= $availabilityBreakFromTime && $appointmentTo > $availabilityBreakFromTime) {
+                return false;
+            }
+
+            if (!empty($availabilityBreakToTime)) {
+                if ($appointmentFrom >= $availabilityBreakFromTime && $appointmentFrom < $availabilityBreakToTime) {
+                    return false;
+                }
+
+                if ($appointmentFrom > $availabilityBreakFromTime && $appointmentTo < $availabilityBreakToTime) {
+                    return false;
+                }
+            }
         }
-        //TODO Fix defect with time in DB we keep HH:mm:ii, on frontend we use HH:mm (16:00:00 !== 16:00)
-        if (!empty($availability->break_from_time) && $appointment->from <= $availability->break_from_time && $appointment->to > $availability->break_from_time) {
+
+        if (!empty($availabilityFromTime) && $appointmentFrom < $availabilityFromTime) {
             return false;
         }
 
-        if (!empty($availability->break_from_time) && !empty($availability->break_to_time) && $appointment->from > $availability->break_from_time && $appointment->to < $availability->break_to_time) {
-            return false;
-        }
-
-        if (!empty($availability->from_time) && $appointment->from < $availability->from_time) {
-            return false;
-        }
-
-        if (!empty($availability->to_time) && $appointment->to > $availability->to_time) {
+        if (!empty($availabilityToTime) && $appointmentTo > $availabilityToTime) {
             return false;
         }
 

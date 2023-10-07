@@ -83,6 +83,24 @@ abstract class TestCase extends BaseTestCase
         return $socialUser;
     }
 
+    public function getAutoScheduleData(): array {
+        return $autoSchedule = [
+            'timeDetails' => [
+                [
+                    "teacherId" => $this->teacher->id,
+                    "day" => "monday",
+                    "time" => "12:00"
+                ],[
+                    "teacherId" => $this->teacher->id,
+                    "day" => "monday",
+                    "time" => "12:00"
+                ]
+            ],
+            'userId' => $this->student->id,
+            'autoScheduleDate' => fake()->date('Y-m-d')
+        ];
+    }
+
     protected static function mockSocialite($socialUser, $provider) : void {
         Socialite::shouldReceive('driver')
             ->once()
