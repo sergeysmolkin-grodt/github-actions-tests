@@ -1,6 +1,6 @@
 <?php
 
-namespace API\Controllers;
+namespace Tests\Integration\API\Controllers;
 
 
 use App\Models\User;
