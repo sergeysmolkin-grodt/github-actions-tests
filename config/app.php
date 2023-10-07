@@ -186,7 +186,6 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        \Illuminate\Filesystem\FilesystemServiceProvider::class
     ])->toArray(),
 
     /*

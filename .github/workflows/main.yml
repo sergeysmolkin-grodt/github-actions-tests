@@ -14,15 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Filesystem
-        run: composer require league/flysystem-read-only "^3.0"
-
       - name: Dependencies
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
                 --ignore-platform-req=ext-zip
-
 
       - name: Copy .env
         run: cp .env.example .env
