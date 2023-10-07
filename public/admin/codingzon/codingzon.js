@@ -2321,11 +2321,15 @@ $('#filter_processing_for_cancel_membership_reason').on('submit', function (even
 
 $('#submit_teacher_review').on('submit', function (event) {
     event.preventDefault();
+
+
     var formData = new FormData($(this).closest('form')[0]);
+    // var ArticalContent = tinymce.get("add_artical_details").getContent();
+    // formData.append('artical_details', ArticalContent);
     formData.append('_token', csrf_token);
 
     $.ajax({
-        url: `${BaseURL}/management/review`,
+        url: BaseURLForAdmin + '/teacher_review/addNew',
         data: formData,
         type: 'POST',
         cache: false,
@@ -2338,7 +2342,7 @@ $('#submit_teacher_review').on('submit', function (event) {
         success: function (response) {
             $('#save-teacher-review-processing').attr("disabled", false);
             $('#save-teacher-review-processing').html('Submit');
-            jsonData = response;
+            jsonData = JSON.parse(response);
             if (jsonData.status == 1) {
                 toastr.success("Success!");
                 setInterval(function () {
@@ -2352,25 +2356,22 @@ $('#submit_teacher_review').on('submit', function (event) {
         error: function (data) {
             $('#save-teacher-review-processing').attr("disabled", false);
             $('#save-teacher-review-processing').html('Submit');
-            try {
-                const parsedData = JSON.parse(data.responseText);
-                toastr.error(parsedData.message ?? "Error!");
-            } catch (e) {
-                toastr.error("Error!");
-            }
+            toastr.error("Error!");
         }
     });
 });
 
 $('#edit_teacher_review').on('submit', function (event) {
     event.preventDefault();
+
+
     var formData = new FormData($(this).closest('form')[0]);
-    var reviewId = $('input[name="reviewId"]').val();
+    // var ArticalContent = tinymce.get("edit_artical_details").getContent();
+    // formData.append('artical_details', ArticalContent);
     formData.append('_token', csrf_token);
-    formData.append('_method', 'PUT');
 
     $.ajax({
-        url: `${BaseURL}/management/review/${reviewId}`,
+        url: BaseURLForAdmin + '/teacher_review/editReview',
         data: formData,
         type: 'POST',
         cache: false,
@@ -2383,7 +2384,7 @@ $('#edit_teacher_review').on('submit', function (event) {
         success: function (response) {
             $('#edit-teacher-review-processing').attr("disabled", false);
             $('#edit-teacher-review-processing').html('Update');
-            jsonData = response;
+            jsonData = JSON.parse(response);
             if (jsonData.status == 1) {
                 toastr.success("Success!");
                 setInterval(function () {
@@ -2397,12 +2398,7 @@ $('#edit_teacher_review').on('submit', function (event) {
         error: function (data) {
             $('#edit-teacher-review-processing').attr("disabled", false);
             $('#edit-teacher-review-processing').html('Update');
-            try {
-                const parsedData = JSON.parse(data.responseText);
-                toastr.error(parsedData.message ?? "Error!");
-            } catch (e) {
-                toastr.error("Error!");
-            }
+            toastr.error("Error!");
         }
     });
 });
@@ -2425,14 +2421,14 @@ function deleteTeacherReview(reviewId) {
         .then((willDelete) => {
             if (willDelete) {
                 $.ajax({
-                    url: `${BaseURL}/management/review/${reviewId}`,
-                    type: 'DELETE',
+                    url: BaseURLForAdmin + '/teacher_review/delete',
+                    type: 'POST',
                     data: {
                         '_token': csrf_token,
                         'reviewId': reviewId
                     },
                     success: function (response) {
-                        jsonData = response;
+                        jsonData = JSON.parse(response);
                         if (jsonData.status == 1) {
                             toastr.success("Success!");
                             setInterval(function () {
@@ -2443,12 +2439,7 @@ function deleteTeacherReview(reviewId) {
                         }
                     },
                     error: function (data) {
-                        try {
-                            const parsedData = JSON.parse(data.responseText);
-                            swal(parsedData.message ?? "Error!");
-                        } catch (e) {
-                            swal("Something went wrong!");
-                        }
+                        swal("Something went wrong!");
                     }
                 });
             }

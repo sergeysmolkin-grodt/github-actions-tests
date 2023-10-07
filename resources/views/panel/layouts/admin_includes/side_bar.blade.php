@@ -121,8 +121,8 @@
 
                 <li class="has-sub is-shown"><a class="menu-item" href="#" data-i18n="nav.page_layouts.3_columns.main">Review</a>
                     <ul class="menu-content" style="">
-                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_review' && \Illuminate\Support\Facades\Request::segment(3) == 'add'): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('/management/review/create') ?>" data-i18n="nav.dash.ecommerce">Add New</a></li>
-                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_review' && \Illuminate\Support\Facades\Request::segment(3) == ''): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('/management/review/') ?>" data-i18n="nav.dash.ecommerce">View All</a></li>
+                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_review' && \Illuminate\Support\Facades\Request::segment(3) == 'add'): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_review/add') ?>" data-i18n="nav.dash.ecommerce">Add New</a></li>
+                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_review' && \Illuminate\Support\Facades\Request::segment(3) == ''): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_review/') ?>" data-i18n="nav.dash.ecommerce">View All</a></li>
                     </ul>
                 </li>
 
@@ -174,10 +174,10 @@
     </ul>
 
     <ul class="navigation navigation-main hidden" id="main-menu-navigation" data-menu="menu-navigation">
-        <li class=" nav-item"><a href="<?= url('management/review') ?>"><i class="icon-star"></i><span class="menu-title" data-i18n="nav.dash.main">Teachers Review</span></a>
+        <li class=" nav-item"><a href="<?= url('admin/teacher_review') ?>"><i class="icon-star"></i><span class="menu-title" data-i18n="nav.dash.main">Teachers Review</span></a>
             <ul class="menu-content">
-                <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'review' && \Illuminate\Support\Facades\Request::segment(3) == 'create'): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('management/review/create/') ?>" data-i18n="nav.dash.ecommerce">Add New</a></li>
-                <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'review' && \Illuminate\Support\Facades\Request::segment(3) == ''): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_review/') ?>" data-i18n="nav.dash.ecommerce">View All</a></li>
+                <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_review' && \Illuminate\Support\Facades\Request::segment(3) == 'add'): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_review/add') ?>" data-i18n="nav.dash.ecommerce">Add New</a></li>
+                <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_review' && \Illuminate\Support\Facades\Request::segment(3) == ''): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_review/') ?>" data-i18n="nav.dash.ecommerce">View All</a></li>
             </ul>
         </li>
     </ul>

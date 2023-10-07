@@ -79,9 +79,4 @@ trait DateTimeTrait
         $carbonDate = Carbon::createFromFormat('Y-m-d', $date);
         return $carbonDate->format('N');
     }
-
-    public function getTimestamp(string $date): int
-    {
-        return strtotime($date);
-    }
 }

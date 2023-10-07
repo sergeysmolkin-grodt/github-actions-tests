@@ -16,11 +16,11 @@ trait FileTrait
         return $fileData;
     }
 
-    public function uploadFile($file, string $path = null, string $storage = null): string|false
+    public function uploadFile($file): string|false
     {
         // TODO: extend function for profile image
-        $folder = $path ?? config('app.profile_image.path');
-        $storage = $storage ?? config('app.profile_image.disk');
+        $folder = config('app.profile_image.path');
+        $storage = config('app.profile_image.disk');
         $filename = uniqid('', true).'_'.str_replace(' ', '_', $file->getClientOriginalName());
 
         $path = Storage::disk($storage)->putFileAs($folder, $file, $filename);

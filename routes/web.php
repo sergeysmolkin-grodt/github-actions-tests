@@ -13,7 +13,6 @@ use App\Http\Controllers\Panel\TeacherController;
 use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Panel\CompanyController;
-use App\Http\Controllers\Panel\Management\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +41,6 @@ Route::group(['middleware' => ['auth:sanctum']],  function() {
     Route::post('/teacher/availabilities/exceptions', [TeacherAvailabilityExceptionController::class, 'store']);
     Route::post('/teacher/availabilities/exceptions/delete', [TeacherAvailabilityExceptionController::class, 'delete']);
     Route::post('/teacher/availability/holidays', [TeacherAvailabilityExceptionController::class, 'storeHoliday']);
-    Route::resource('/management/review', ReviewController::class);
 });
 
 
