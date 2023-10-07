@@ -10,7 +10,6 @@ use App\Http\Requests\API\SMSVerificationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\UserDetails;
-/*use App\Services\TwilloService;*/
 use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -27,14 +26,14 @@ class UserAuthenticationController extends Controller
     use \App\Traits\FileTrait;
 
     protected $authService;
-  /*  protected TwilloService $twilloService;*/
+    protected $twilloService;
 
     public function __construct(
-        AuthService $authService, /** TwilloService $twilloService**/)
+        AuthService $authService)
     {
         parent::__construct();
         $this->authService = $authService;
-       /* $this->twilloService = $twilloService;*/
+
     }
 
     public function register(RegisterRequest $request): JsonResponse
@@ -68,12 +67,7 @@ class UserAuthenticationController extends Controller
         // Assign role for new user
         $user->assignRole($validated['role']);
 
-       /* try {
-            $this->twilloService->sendVerificationCode($user->userDetails->mobile);
-        } catch (Exception $e) {
-            Log::error("Error while sending SMS: " . $e->getMessage());
-            return $this->respondError('An error occurred while sending the verification code.');
-        }*/
+
 
         // ToDo: form necessary response with user data
 
