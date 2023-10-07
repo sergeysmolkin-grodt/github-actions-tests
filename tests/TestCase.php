@@ -66,7 +66,7 @@ abstract class TestCase extends BaseTestCase
 
         UserDevice::factory()->create(['user_id' => $teacher->id]);
         TeacherOptions::factory()->create(['user_id' => $teacher->id]);
-        Availability::factory()->create(['teacher_id' => $teacher->id, 'day' => 'monday']);
+        Availability::factory()->create(['teacher_id' => $teacher->id, 'day' => 'saturday']);
 
         return $teacher;
     }
