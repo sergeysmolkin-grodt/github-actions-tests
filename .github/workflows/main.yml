@@ -36,7 +36,6 @@ jobs:
       - name: Permissions for storage
         run: docker exec app_new chmod -R 777 storage
 
-
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: docker exec app_new php artisan test
 
