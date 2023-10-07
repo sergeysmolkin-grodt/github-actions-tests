@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+//use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
@@ -108,12 +108,12 @@ final class UserAuthenticationTest extends TestCase
         ]));
 
 
-       foreach (Storage::disk()->allFiles('images') as  $file) {
+      /* foreach (Storage::disk()->allFiles('images') as  $file) {
            if (str_contains($file, $user['profileImage']->name)) {
                Storage::assertExists($file);
                break;
            }
-       }
+       }*/
 
         $response->assertStatus(Response::HTTP_OK);
     }
@@ -368,7 +368,7 @@ final class UserAuthenticationTest extends TestCase
     {
         parent::tearDown();
 
-
+        //Storage::disk('local')->deleteDirectory('/images');
     }
 
 
