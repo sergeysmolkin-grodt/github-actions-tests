@@ -67,12 +67,12 @@ class UserAuthenticationController extends Controller
         // Assign role for new user
         $user->assignRole($validated['role']);
 
-        try {
+       /* try {
             $this->twilloService->sendVerificationCode($user->userDetails->mobile);
         } catch (Exception $e) {
             Log::error("Error while sending SMS: " . $e->getMessage());
             return $this->respondError('An error occurred while sending the verification code.');
-        }
+        }*/
 
         // ToDo: form necessary response with user data
 
