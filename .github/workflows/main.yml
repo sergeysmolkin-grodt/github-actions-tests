@@ -37,7 +37,7 @@ jobs:
         run: docker exec app_new chmod -R 777 storage
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        run: php artisan test --parallel
+        run: php artisan test
 
 
 
