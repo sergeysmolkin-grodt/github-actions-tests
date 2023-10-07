@@ -5,11 +5,13 @@ namespace App\Repositories;
 use App\Interfaces\TeacherRepositoryInterface;
 use App\Models\TeacherOptions;
 use App\Models\User;
+use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Model;
 
 
 class TeacherRepository implements TeacherRepositoryInterface
 {
+    use ModelTrait;
     protected User $userModel;
     protected UserRepository $userRepository;
 
@@ -26,9 +28,14 @@ class TeacherRepository implements TeacherRepositoryInterface
 
     public function updateTeacher(array $data, User $teacher) : void
     {
-        $this->userRepository->updateUser($data, $teacher);
-        $this->userRepository->updateUserDetails($data, $teacher->userDetails);
-        $this->updateTeacherOptions($data, $teacher->teacherOptions);
+        $userData = $this->getFillableDataForModel($data, $teacher);
+        $this->userRepository->updateUser($userData, $teacher);
+
+        $userDetails = $this->getFillableDataForModel($data, $teacher->userDetails);
+        $this->userRepository->updateUserDetails($userDetails, $teacher->userDetails);
+
+        $teacherOptions = $this->getFillableDataForModel($data, $teacher->teacherOptions);
+        $this->updateTeacherOptions($teacherOptions, $teacher->teacherOptions);
     }
 
     public function updateTeacherOptions(array $data, TeacherOptions $teacherOptions) : void
