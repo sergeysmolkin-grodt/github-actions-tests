@@ -30,8 +30,7 @@ class UserAuthenticationController extends Controller
   /*  protected TwilloService $twilloService;*/
 
     public function __construct(
-        AuthService $authService,
-       /** TwilloService $twilloService**/)
+        AuthService $authService, /** TwilloService $twilloService**/)
     {
         parent::__construct();
         $this->authService = $authService;
