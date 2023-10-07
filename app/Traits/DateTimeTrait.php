@@ -71,7 +71,7 @@ trait DateTimeTrait
 
     public function getDayNameFromDate(string $date): string
     {
-        return Carbon::parse($date)->dayName;
+        return Carbon::parse($date)->locale('en')->dayName;
     }
 
     public function getDayOfWeek(string $date): int
