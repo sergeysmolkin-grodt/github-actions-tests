@@ -14,11 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Filesystem
+        run: composer require league/flysystem-aws-s3-v3 "^3.0" --with-all-dependencies
+
       - name: Dependencies
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
-                --ignore-platform-req=ext-zip
+            --ignore-platform-req=ext-zip
 
       - name: Copy .env
         run: cp .env.example .env
@@ -35,6 +38,5 @@ jobs:
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: php artisan test
-
 
 
