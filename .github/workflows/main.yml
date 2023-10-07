@@ -35,13 +35,6 @@ jobs:
 
       - name: Permissions for storage
         run: docker exec app_new chmod -R 777 storage
-      - name: Execute PHPUnit Tests
-        uses: php-actions/phpunit@v3
-        with:
-          version: 10.4
-          php_version: 8.1
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: php artisan test --parallel
