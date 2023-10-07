@@ -14,10 +14,11 @@ class TwilloService
     {
         $this->twillo = new Client(env('TWILIO_SID'), env('TWILIO_AUTH_TOKEN'));
         $this->TWILIO_VERIFY_SID = env('TWILIO_VERIFY_SID');
-    }
+    }*/
 
     public function sendVerificationCode($phoneNumber): bool
     {
+        return true;
         $verification = $this->twillo->verify->v2->services($this->TWILIO_VERIFY_SID)
             ->verifications
             ->create($phoneNumber, "sms");
@@ -28,7 +29,7 @@ class TwilloService
         return true;
     }
 
-    public function verifyCode($phoneNumber, $code): bool
+    /*public function verifyCode($phoneNumber, $code): bool
     {
         $verification_check = $this->twillo->verify->v2->services($this->TWILIO_VERIFY_SID)
             ->verificationChecks
@@ -39,4 +40,5 @@ class TwilloService
         }
         return true;
     }*/
+
 }
