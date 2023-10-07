@@ -146,13 +146,7 @@ class UserAuthenticationController extends Controller
     {
         $data = $request->validate(['phone_number' => 'required|regex:/^[\+0-9]+$/|min:10|max:17']);
 
-        try {
-            $this->twilloService->sendVerificationCode($data['phone_number']);
 
-        } catch (Exception $e) {
-            Log::error("Error while sending SMS: " . $e->getMessage());
-            return $this->respondError('An error occurred while sending the verification code.');
-        }
         return $this->respondWithSuccess([
             'message' => 'Verification code has been sent'
         ]);
@@ -161,14 +155,7 @@ class UserAuthenticationController extends Controller
     public function verifyCode(SMSVerificationRequest $request)
     {
         $data = $request->validated();
-        try {
-            $this->twilloService->verifyCode($data['phone_number'], $data['code']);
 
-            $this->userRepository->verifyUserPhoneNumber($data['phone_number']);
-        } catch (Exception $e) {
-            Log::error("Error while verifying code: " . $e->getMessage());
-            return $this->respondError($e->getMessage());
-        }
         return $this->respondWithSuccess([
             'message' => 'Phone number verified successfully'
         ]);
