@@ -53,7 +53,7 @@ class AppointmentService
         }
 
         $appointmentDayName = strtolower($this->getDayNameFromDate($appointmentDate));
-        dd($appointmentDate,$appointmentDayName);
+
         if (empty(Availability::where('teacher_id', $teacherId)
                                 ->where('day', $appointmentDayName)
                                 ->where('is_available', 1)
