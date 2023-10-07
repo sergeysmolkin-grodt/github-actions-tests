@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Exception;
+/*use Exception;
 use Twilio\Rest\Client;
 
 class TwilloService
@@ -40,4 +40,4 @@ class TwilloService
         return true;
     }
 
-}
+}*/
