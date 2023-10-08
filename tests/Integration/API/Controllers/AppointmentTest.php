@@ -65,9 +65,8 @@ final class AppointmentTest extends TestCase
 
         $userId = $appointment['userId'];
 
-        Auth::forgetUser();
 
-        $response = $this->postAppointmentAsUser($appointment);
+        $response = $this->user->delete()->$this->postAppointmentAsUser($appointment);
 
         $response->assertJson([
             'error' => "Student with this ID $userId does not exist in the system or not active"
