@@ -49,7 +49,7 @@ class AutoScheduleController extends Controller
         try {
             $this->autoScheduleService->setAutoScheduleTime($validated);
 
-            $this->createUpcomingSubscription();
+           // $this->createUpcomingSubscription();
 
             $processors = config('processors');
             $processor = app($processors['processStudentAutoSchedule']);
