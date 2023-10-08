@@ -45,7 +45,7 @@ class AppointmentController extends Controller
         try {
             $appointmentId = $this->appointmentService->bookAppointment(
                 new AppointmentData(
-                    userId: Auth::user()->id ?? $validated['userId'],
+                    userId: Auth::user()->id,
                     teacherId: $validated['teacherId'],
                     date: $validated['date'],
                     startTime: $validated['startTime'],

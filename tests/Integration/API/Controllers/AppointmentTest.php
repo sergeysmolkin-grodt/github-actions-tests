@@ -121,7 +121,8 @@ final class AppointmentTest extends TestCase
     #[Test]
     public function testCantStoreAppointmentWhenTeacherIsNotAvailableOnCertainDate() {
 
-        $appointment = TestCase::getAppointmentData($this->teacher,$this->user);
+        $unavailableTeacher = User::factory()->create()->assignRole('teacher');
+        $appointment = TestCase::getAppointmentData($unavailableTeacher,$this->user);
 
         $response = $this->postAppointmentAsUser($appointment);
 
