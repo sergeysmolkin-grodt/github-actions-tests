@@ -60,7 +60,7 @@ final class AppointmentTest extends TestCase
 
         $appointment = array_merge(
             TestCase::getAppointmentData($this->teacher,$this->user), [
-               'userId' => rand()
+               'userId' => 99
         ]);
 
         $userId = $appointment['userId'];
