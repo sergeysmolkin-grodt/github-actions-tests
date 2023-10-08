@@ -10,8 +10,10 @@ use App\Models\Reminder;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
+use Laravel\Sanctum\Sanctum;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,6 +57,7 @@ final class AppointmentTest extends TestCase
     #[Test]
     public function testUserWhenStoresDoesntPassStudentExistenceInTheSystemCheck()
     {
+
         $appointment = array_merge(
             TestCase::getAppointmentData($this->teacher,$this->user), [
                'userId' => rand()
@@ -62,12 +65,9 @@ final class AppointmentTest extends TestCase
 
         $userId = $appointment['userId'];
 
-        $response =  $this->postJson(
-                uri: "api/appointments",
-                data: $appointment,
-                headers:[ 'Accept-Language' => 'en']
-            );
+        Auth::guest();
 
+        $response = $this->postAppointmentAsUser($appointment);
 
         $response->assertJson([
             'error' => "Student with this ID $userId does not exist in the system or not active"
