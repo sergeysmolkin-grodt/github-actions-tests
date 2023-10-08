@@ -17,6 +17,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Mockery;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
@@ -573,7 +574,7 @@ final class UserRepositoryTest extends TestCase
     public function testUpdateUserDetailsUpdatesUserDetails()
     {
         $updateData = [
-            'mobile' => $this->faker->phoneNumber(),
+            'mobile' => Str::random(10),
             'country_code' => $this->faker->countryCode(),
             'age_group' => Arr::random(['teen','adult']),
             'birth_date' => $this->faker->date(),
