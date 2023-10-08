@@ -123,7 +123,9 @@ final class AppointmentTest extends TestCase
 
         $appointment = TestCase::getAppointmentData($this->teacher,$this->user);
 
-        $response = $this->postAppointmentAsUser($appointment);
+        $response = $this->postAppointmentAsUser(array_merge($appointment, [
+            'date' => fake()->date
+        ]));
 
         $response->assertJson([
             "error" => "Teacher is not available on this date"
