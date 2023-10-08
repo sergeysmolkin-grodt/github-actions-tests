@@ -32,7 +32,7 @@ final class UserAuthenticationTest extends TestCase
         parent::setUp();
         Artisan::call('migrate:fresh --seed');
 
-        $this->user = User::factory()->create(['email' => $this->faker->email]);
+        $this->user = User::factory()->create(['email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$')]);
     }
 
     #[Test]
@@ -203,7 +203,7 @@ final class UserAuthenticationTest extends TestCase
     public function testUserCannotAuthenticateWithInvalidPassword()
     {
         $response = $this->postJson('api/auth/login', [
-            'email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$'),
+            'email' => $this->user->email,
             'password' => 'wrong-password',
             'loginType' => 'NORMAL'
         ]);
