@@ -124,7 +124,7 @@ final class AppointmentTest extends TestCase
         $appointment = TestCase::getAppointmentData($this->teacher,$this->user);
 
         $response = $this->postAppointmentAsUser(array_merge($appointment, [
-            'date' => fake()->date
+            'date' => '2023-10-08'
         ]));
 
         $response->assertJson([
