@@ -29,6 +29,9 @@ jobs:
       - name: Composer autoload
         run: composer dump-autoload
 
+      - name: Clear config
+        run: php artisan config:clear
+
       - name: Copy .env
         run: cp .env.example .env
 
