@@ -581,7 +581,7 @@ final class UserRepositoryTest extends TestCase
 
         $this->userRepository->updateUserDetails($updateData, $this->detailedUser->userDetails);
 
-        $updatedUserDetails = UserDetails::find($this->detailedUser->userDetails)->first();
+        $updatedUserDetails = UserDetails::find($this->detailedUser->userDetails)->get();
 
         foreach ($updateData as $key => $value) {
             $this->assertEquals($value, $updatedUserDetails->{$key});
