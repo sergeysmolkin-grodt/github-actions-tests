@@ -65,8 +65,11 @@ final class AppointmentTest extends TestCase
 
         $userId = $appointment['userId'];
 
-
-        $response = $this->postAppointmentAsUser($appointment);
+        $response = $this->postJson(
+                uri: "api/appointments",
+                data: $appointment,
+                headers: array_merge(['Accept-Language' => 'en'])
+            );
 
         $response->assertJson([
             'error' => "Student with this ID $userId does not exist in the system or not active"
