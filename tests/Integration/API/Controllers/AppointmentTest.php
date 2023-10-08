@@ -65,7 +65,7 @@ final class AppointmentTest extends TestCase
 
         $userId = $appointment['userId'];
 
-        Auth::guest();
+        Auth::forgetUser();
 
         $response = $this->postAppointmentAsUser($appointment);
 
