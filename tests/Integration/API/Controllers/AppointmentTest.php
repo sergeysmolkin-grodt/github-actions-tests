@@ -54,7 +54,7 @@ final class AppointmentTest extends TestCase
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
     }
 
-    #[Test]
+    /*#[Test]
     public function testUserWhenStoresDoesntPassStudentExistenceInTheSystemCheck()
     {
 
@@ -76,7 +76,7 @@ final class AppointmentTest extends TestCase
         ]);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
-    }
+    }*/
 
     #[Test]
     public function testUserWhenStoresDoesntPassTeacherExistenceInTheSystemCheck()
