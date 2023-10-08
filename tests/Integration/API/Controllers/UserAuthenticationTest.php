@@ -156,7 +156,7 @@ final class UserAuthenticationTest extends TestCase
     public function testLoginWithExistingUserSuccessfully() : void
     {
         $user = User::factory()->create([
-            'email' => fake()->email(),
+            'email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$'),
             'password' => Hash::make('12345678'),
             'is_active' => 1
         ]);
