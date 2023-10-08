@@ -163,8 +163,8 @@ final class AppointmentTest extends TestCase
         Mail::fake();
 
         $appointment = array_merge(
-            TestCase::getAppointmentData($this->teacher,$this->user),[
-            'date' => '2024-12-30',
+            TestCase::getAppointmentData($this->teacher,$this->user), [
+            'date' => '2024-12-29',
         ]);
 
         $response = $this->postAppointmentAsUser($appointment);
