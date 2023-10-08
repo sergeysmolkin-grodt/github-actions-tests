@@ -368,7 +368,7 @@ final class UserAuthenticationTest extends TestCase
     {
         parent::tearDown();
 
-        //Storage::disk('local')->deleteDirectory('/images');
+        Storage::disk('local')->deleteDirectory('/images');
     }
 
 

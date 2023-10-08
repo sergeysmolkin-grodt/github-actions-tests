@@ -23,6 +23,9 @@ jobs:
           args: --ignore-platform-req=ext-gd
             --ignore-platform-req=ext-zip
 
+      - name: Link to the storage
+        run: php artisan storage:link
+
       - name: Copy .env
         run: cp .env.example .env
 
