@@ -26,6 +26,9 @@ jobs:
       - name: Link to the storage
         run: php artisan storage:link
 
+      - name: Composer autoload
+        run: composer dump-autoload
+
       - name: Copy .env
         run: cp .env.example .env
 
