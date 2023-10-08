@@ -203,7 +203,7 @@ final class UserAuthenticationTest extends TestCase
     public function testUserCannotAuthenticateWithInvalidPassword()
     {
         $response = $this->postJson('api/auth/login', [
-            'email' => $this->user->email,
+            'email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$'),
             'password' => 'wrong-password',
             'loginType' => 'NORMAL'
         ]);
