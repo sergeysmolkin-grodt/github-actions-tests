@@ -119,12 +119,12 @@ final class AppointmentTest extends TestCase
     }
 
     #[Test]
-    public function testCantStoreAppointmentWhenTeacherIsNotAvailableOnCertainDate() {
+    public function testCantStoreAppointmentIfTeacherIsNotAvailableOnCertainDate() {
 
         $appointment = TestCase::getAppointmentData($this->teacher,$this->user);
 
         $response = $this->postAppointmentAsUser(array_merge($appointment, [
-            'date' => '2023-10-08'
+            'date' => now()->addDay()
         ]));
 
         $response->assertJson([
