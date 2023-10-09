@@ -262,7 +262,7 @@ class AppointmentService
     public function createZoomMeetingLink(): string|array
     {
         try {
-            if (config('services.zoom.is_enable')) {
+            if (false){
                 $teacherZoomUserId = User::findOrFail($this->appointmentData->teacherId)->teacherOptions->zoom_user_id;
 
                 $zoomData = $this->appointmentServicesAggregator->getZoomService()->createMeeting(
