@@ -108,7 +108,7 @@ class UserAuthenticationController extends Controller
     {
         //$request->user()->tokens()->delete();
 
-        auth()->user()->tokens()->where('id', $request->user()->currentAccessToken()->id )->delete();
+        $request->user()->tokens()->where('id', auth()->id())->delete();
 
         return $this->respondWithSuccess(['message' => 'Logged out successfully']);
     }
