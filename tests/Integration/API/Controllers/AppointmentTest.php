@@ -217,7 +217,7 @@ final class AppointmentTest extends TestCase
 
         $appointment = array_merge(
             self::getAppointmentData($this->teacher,$this->user), [
-                'date' => '2024-12-30'
+                'date' => '2024-12-28'
             ]);
 
         $response = $this->postAppointmentAsUser($appointment);
