@@ -430,7 +430,7 @@ class AppointmentService
         }
 
         // Send Android Push Notifications via Firebase Cloud Messaging
-        if (config('app.push_notification')) {
+        if (false) {
             $this->sendPushNotificationsToTeacher(
                 student:       $user,
                 appointmentId: $appointment->id,
