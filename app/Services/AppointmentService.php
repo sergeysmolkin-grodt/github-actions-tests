@@ -276,7 +276,7 @@ class AppointmentService
         } catch(CouldNotCreateZoomMeeting $e) {
             return $e->getMessage();
         }
-        dd($zoomData);
+
         return $zoomData;
     }
 
