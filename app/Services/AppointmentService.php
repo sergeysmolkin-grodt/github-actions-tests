@@ -391,11 +391,11 @@ class AppointmentService
         }
 
         // Create Zoom meeting link
-       /* if (! is_array($responseDataZoom = $this->createZoomMeetingLink())) {
+        if (! is_array($responseDataZoom = $this->createZoomMeetingLink())) {
             Log::error("Zoom meeting has not been created due error: {$responseDataZoom}");
 
             throw new CouldNotBookAppointment(__('Zoom meeting has not been created due error: ' . $responseDataZoom));
-        }*/
+        }
 
         // Create Appointment
         if (! ($appointment = $this->createAppointment()) instanceof Appointment) {
