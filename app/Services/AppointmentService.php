@@ -277,7 +277,7 @@ class AppointmentService
             return $e->getMessage();
         }
 
-        return $zoomData;
+        return '$zoomData';
     }
 
     public function sendPushNotificationsToTeacher(User $student, int $appointmentId, int $teacherId): ?string
