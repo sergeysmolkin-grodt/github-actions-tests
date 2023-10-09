@@ -10,6 +10,7 @@ use App\Http\Requests\API\SMSVerificationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\UserDetails;
+use App\Services\TwilloService;
 use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -19,21 +20,20 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use App\Services\AuthService;
-
+use Twilio\Rest\Client;
 
 class UserAuthenticationController extends Controller
 {
     use \App\Traits\FileTrait;
 
     protected $authService;
+    protected TwilloService $twilloService;
 
-
-    public function __construct(
-        AuthService $authService)
+    public function __construct(AuthService $authService, TwilloService $twilloService)
     {
         parent::__construct();
         $this->authService = $authService;
-
+        $this->twilloService = $twilloService;
     }
 
     public function register(RegisterRequest $request): JsonResponse
@@ -67,7 +67,12 @@ class UserAuthenticationController extends Controller
         // Assign role for new user
         $user->assignRole($validated['role']);
 
-
+        try {
+            //$this->twilloService->sendVerificationCode($user->userDetails->mobile);
+        } catch (Exception $e) {
+            Log::error("Error while sending SMS: " . $e->getMessage());
+            return $this->respondError('An error occurred while sending the verification code.');
+        }
 
         // ToDo: form necessary response with user data
 
@@ -148,7 +153,7 @@ class UserAuthenticationController extends Controller
         $data = $request->validate(['phone_number' => 'required|regex:/^[\+0-9]+$/|min:10|max:17']);
 
         try {
-           // $this->twilloService->sendVerificationCode($data['phone_number']);
+            $this->twilloService->sendVerificationCode($data['phone_number']);
 
         } catch (Exception $e) {
             Log::error("Error while sending SMS: " . $e->getMessage());
@@ -163,7 +168,7 @@ class UserAuthenticationController extends Controller
     {
         $data = $request->validated();
         try {
-          //  $this->twilloService->verifyCode($data['phone_number'], $data['code']);
+            $this->twilloService->verifyCode($data['phone_number'], $data['code']);
 
             $this->userRepository->verifyUserPhoneNumber($data['phone_number']);
         } catch (Exception $e) {
