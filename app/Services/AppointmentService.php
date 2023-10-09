@@ -262,7 +262,7 @@ class AppointmentService
     public function createZoomMeetingLink(): string|array
     {
         try {
-            if (false){
+            if (config('services.zoom.is_enable')) {
                 $teacherZoomUserId = User::findOrFail($this->appointmentData->teacherId)->teacherOptions->zoom_user_id;
 
                 $zoomData = $this->appointmentServicesAggregator->getZoomService()->createMeeting(
@@ -277,7 +277,7 @@ class AppointmentService
             return $e->getMessage();
         }
 
-        return '$zoomData';
+        return $zoomData;
     }
 
     public function sendPushNotificationsToTeacher(User $student, int $appointmentId, int $teacherId): ?string
@@ -391,11 +391,11 @@ class AppointmentService
         }
 
         // Create Zoom meeting link
-        if (! is_array($responseDataZoom = $this->createZoomMeetingLink())) {
+       /* if (! is_array($responseDataZoom = $this->createZoomMeetingLink())) {
             Log::error("Zoom meeting has not been created due error: {$responseDataZoom}");
 
             throw new CouldNotBookAppointment(__('Zoom meeting has not been created due error: ' . $responseDataZoom));
-        }
+        }*/
 
         // Create Appointment
         if (! ($appointment = $this->createAppointment()) instanceof Appointment) {
