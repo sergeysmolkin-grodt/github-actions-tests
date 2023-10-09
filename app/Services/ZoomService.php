@@ -37,7 +37,7 @@ class ZoomService
             'Authorization' => 'Bearer ' . $accessToken,
             'Content-Type' => 'application/json',
         ])->post(config('services.zoom.api_url') . "users/{$zoomUserId}/meetings", $data);
-        dd($createdMeetingResponse->json());
+
         // Check if the Zoom API call was successful
         if ($createdMeetingResponse->successful()) {
             return $createdMeetingResponse->json();
