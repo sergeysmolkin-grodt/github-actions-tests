@@ -37,7 +37,7 @@ jobs:
         working-directory: .
 
       - name: Permissions for storage
-        run: docker exec app_new chmod -R 755 storage
+        run: docker exec app_new_test chmod -R 755 storage
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
