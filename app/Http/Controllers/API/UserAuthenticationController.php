@@ -106,7 +106,7 @@ class UserAuthenticationController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->currentAccessToken()->delete();
+        $request->user()->tokens()->delete();
 
         return $this->respondWithSuccess(['message' => 'Logged out successfully']);
     }

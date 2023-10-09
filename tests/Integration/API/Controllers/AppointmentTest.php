@@ -54,30 +54,6 @@ final class AppointmentTest extends TestCase
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
     }
 
-    /*#[Test]
-    public function testUserWhenStoresDoesntPassStudentExistenceInTheSystemCheck()
-    {
-
-        $appointment = array_merge(
-            TestCase::getAppointmentData($this->teacher,$this->user), [
-               'userId' => 99
-        ]);
-
-        $userId = $appointment['userId'];
-
-        $response = $this->postJson(
-                uri: "api/appointments",
-                data: $appointment,
-                headers: array_merge(['Accept-Language' => 'en'])
-            );
-
-        $response->assertJson([
-            'error' => "Student with this ID $userId does not exist in the system or not active"
-        ]);
-
-        $response->assertStatus(Response::HTTP_BAD_REQUEST);
-    }*/
-
     #[Test]
     public function testUserWhenStoresDoesntPassTeacherExistenceInTheSystemCheck()
     {

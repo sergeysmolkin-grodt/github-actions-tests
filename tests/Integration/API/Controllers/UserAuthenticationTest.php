@@ -102,13 +102,12 @@ final class UserAuthenticationTest extends TestCase
    public function testUserWhenRegisteredWithPhotoItUploadsToTheStorage()
     {
 
-
         $response = $this->postJson("api/auth/register", $user = array_merge(self::getUserData(),[
             'profileImage' => UploadedFile::fake()->image('filename.png', 200, 200)->size(1024),
         ]));
 
 
-       /*foreach (Storage::disk()->allFiles('images') as  $file) {
+       /*foreach (Storage::disk()->allFiles('images') as $file) {
            if (str_contains($file, $user['profileImage']->name)) {
                Storage::assertExists($file);
                break;
@@ -368,7 +367,7 @@ final class UserAuthenticationTest extends TestCase
     {
         parent::tearDown();
 
-       /* Storage::disk('local')->deleteDirectory('/images');*/
+        /*Storage::disk('local')->deleteDirectory('/images');*/
     }
 
 
