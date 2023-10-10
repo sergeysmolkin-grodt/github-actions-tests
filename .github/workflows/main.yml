@@ -43,7 +43,7 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
-        continue-on-error: false
+        if: success()
 
 
 
