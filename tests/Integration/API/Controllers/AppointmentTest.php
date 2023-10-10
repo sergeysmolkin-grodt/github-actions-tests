@@ -87,7 +87,7 @@ final class AppointmentTest extends TestCase
         $response = $this->postAppointmentAsUser($appointment);
 
         $response->assertJsonFragment([
-            "error" => "We are updaing this teacher's schedule, therefore, we are unable to schedule for you a lesson at this time. Please try again within a few hours :) Thank you for understanding."
+            "error" => "We are updating this teacher's schedule, therefore, we are unable to schedule for you a lesson at this time. Please try again within a few hours :) Thank you for understanding."
         ]);
 
         $response->assertStatus(Response::HTTP_BAD_REQUEST);
