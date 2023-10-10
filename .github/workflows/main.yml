@@ -42,4 +42,12 @@ jobs:
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
 
-
+      - name: Check test status
+        run: |
+            if [ $? -eq 0 ]; then
+              echo "Tests passed. Proceeding with merge..."
+            else
+              echo "Tests failed. Preventing merge."
+              # Ваш код для предотвращения слияния, например, можно использовать GitHub API для добавления комментария или установки статуса.
+              exit 1
+            fi
