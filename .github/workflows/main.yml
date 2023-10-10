@@ -6,6 +6,7 @@ on:
     branches: [ main ]
 
 
+
 jobs:
   deploy:
     name: Build & Test
@@ -44,7 +45,7 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
-        if: success()
+        if: true
 
 
 
