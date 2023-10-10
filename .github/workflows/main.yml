@@ -13,21 +13,16 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: false
 
-
-  test:
-    runs-on: ubuntu-latest
-    continue-on-error: false
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v3
-        continue-on-error: false
+        if: success()
 
       - name: Dependencies
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
-                --ignore-platform-req=ext-zip
+            --ignore-platform-req=ext-zip
 
       - name: Link to the storage
         run: php artisan storage:link
@@ -50,7 +45,7 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
-        continue-on-error: false
+        if: true
 
 
 
