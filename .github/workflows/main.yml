@@ -5,10 +5,12 @@ on:
   pull_request:
     branches: [ main ]
 
+
 jobs:
   deploy:
     name: Build & Test
     runs-on: ubuntu-latest
+    continue-on-error: false
 
     steps:
       - name: Checkout code
@@ -42,6 +44,7 @@ jobs:
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
         continue-on-error: false
+
 
 
 
