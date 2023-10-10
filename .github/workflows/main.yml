@@ -42,20 +42,20 @@ jobs:
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
         continue-on-error: false
+        if: |
+          if [ $? -eq 0 ]; then
+            echo "Tests passed. Proceeding with merge..."
+          else
+            echo "Tests failed. Preventing merge."
+              PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
+          COMMENT="Tests failed. Merging is not allowed until tests pass."
+          TOKEN=${{ secrets.GITHUB_TOKEN }}
+          curl -X POST -d "{\"body\": \"$COMMENT\"}" -H "Authorization: token $TOKEN" -H "Content-Type: application/json" $API_URL
+          # Установка статуса "failure" для GitHub Actions
+          gh status create "Tests failed" -c "$GITHUB_SHA" -d "Tests failed" -s failure
+          exit 1
 
-      - name: Check test status
-        run: |
-            if [ $? -eq 0 ]; then
-              echo "Tests passed. Proceeding with merge..."
-            else
-              echo "Tests failed. Preventing merge."
-                PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-            API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/comments"
-            COMMENT="Tests failed. Merging is not allowed until tests pass."
-            TOKEN=${{ secrets.GITHUB_TOKEN }}
-            curl -X POST -d "{\"body\": \"$COMMENT\"}" -H "Authorization: token $TOKEN" -H "Content-Type: application/json" $API_URL
-            # Установка статуса "failure" для GitHub Actions
-            gh status create "Tests failed" -c "$GITHUB_SHA" -d "Tests failed" -s failure
-            exit 1
+          fi
 
-            fi
+
