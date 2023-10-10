@@ -47,6 +47,15 @@ jobs:
         run: php artisan test --filter Integration
         if: true
 
+      - name: Check test status
+        run: |
+          if [ $? -ne 0 ]; then
+            echo "Tests failed. Reverting the commit..."
+            git reset --hard HEAD~1
+            git push -f origin main
+          fi
+        if: failure()
+
 
 
 
