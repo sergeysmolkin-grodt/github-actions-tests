@@ -1,0 +1,43 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Dependencies
+        uses: php-actions/composer@v6
+        with:
+          args: --ignore-platform-req=ext-gd
+            --ignore-platform-req=ext-zip
+
+      - name: Link to the storage
+        run: php artisan storage:link
+
+      - name: Clear config
+        run: php artisan config:clear
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Generate app key
+        run: php artisan key:generate
+
+      - name: Build and run Docker containers
+        run: docker-compose -f docker-compose.dev.yml up -d
+        working-directory: .
+
+      - name: Permissions for storage
+        run: docker exec app_new_test chmod -R 755 storage
+
+      - name: Execute tests via PHPUnit
+        run: php artisan test --filter Integration
+        continue-on-error: true
