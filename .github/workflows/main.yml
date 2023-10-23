@@ -41,5 +41,13 @@ jobs:
         run: docker exec app_new_test chmod -R 755 storage
 
       - name: Execute tests via PHPUnit
-        run: php artisan test --filter Integration
+        id: tests
+        run: php artisan test --filter Integration || echo "::set-output name=failed::true"
 
+      - name: Revert Commit if Tests Fail
+        if: steps.tests.outputs.failed == 'true'
+        run: |
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
+          git reset --hard HEAD~1
+          git push --force
