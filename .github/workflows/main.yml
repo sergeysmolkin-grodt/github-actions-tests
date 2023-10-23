@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
 
       - name: Dependencies
         uses: php-actions/composer@v6
@@ -42,10 +44,10 @@ jobs:
 
       - name: Execute tests via PHPUnit
         id: tests
-        run: php artisan test --filter Integration || echo "FAILED=true" >> $GITHUB_ENV
+        run: php artisan test --filter Integration || echo "::set-output name=failed::true"
 
       - name: Revert Commit if Tests Fail
-        if: ${{ env.FAILED == 'true' }}
+        if: steps.tests.outputs.failed == 'true'
         run: |
           git config user.name 'GitHub Actions'
           git config user.email 'actions@github.com'
