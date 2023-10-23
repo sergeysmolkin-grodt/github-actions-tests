@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
             fetch-depth: 0
+            token: ${{ secrets.GH_PAT }}
 
       - name: Dependencies
         uses: php-actions/composer@v6
@@ -44,12 +45,15 @@ jobs:
 
       - name: Execute tests via PHPUnit
         id: tests
-        run: php artisan test --filter Integration || echo "::set-output name=failed::true"
+        run: php artisan test --filter Integration || echo "FAILED=true" >> $GITHUB_ENV
 
       - name: Revert Commit if Tests Fail
-        if: steps.tests.outputs.failed == 'true'
+        if: ${{ env.FAILED == 'true' }}
         run: |
           git config user.name 'GitHub Actions'
           git config user.email 'actions@github.com'
           git reset --hard HEAD~1
           git push --force
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+
