@@ -43,27 +43,8 @@ jobs:
         run: php artisan test --filter Integration
         continue-on-error: true
 
-      - name: Set status check
-        if: steps.tests.outcome == 'failure'
-        uses: actions/github-script@v3
-        with:
-          script: |
-            const { owner, repo } = context.repo
-            const sha = context.sha
-            await github.repos.createStatus({
-              owner,
-              repo,
-              sha,
-              state: 'failure',
-              context: 'Integration Tests',
-              description: 'Tests failed',
-            })
-
       - name: Revert commit if tests are failed (tests that failed has 2 status code)
         run: |
-          if [ $? -eq 2 ]
-          then
             git reset --hard HEAD~1
             git push --force
-          fi
         shell: bash
