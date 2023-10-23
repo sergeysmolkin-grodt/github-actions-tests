@@ -5,18 +5,14 @@ on:
   pull_request:
     branches: [ main ]
 
-
-
 jobs:
   deploy:
     name: Build & Test
     runs-on: ubuntu-latest
-    continue-on-error: false
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        if: success()
 
       - name: Dependencies
         uses: php-actions/composer@v6
@@ -45,18 +41,3 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
-        if: true
-
-      - name: Check test status
-        run: |
-          if [ $? -ne 0 ]; then
-            echo "Tests failed. Reverting the commit..."
-            git reset --hard HEAD~1
-            git push -f origin main
-          fi
-
-        if: failure()
-
-
-
-
