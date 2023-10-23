@@ -54,7 +54,7 @@ final class CompanyRepositoryTest extends TestCase
 
         $this->assertInstanceOf(Company::class, $result);
 
-        $this->assertDatabaseHas('companies', $result->toArray());
+        $this->assertDatabaseHas('companies', $result);
     }
 
     #[Test]
