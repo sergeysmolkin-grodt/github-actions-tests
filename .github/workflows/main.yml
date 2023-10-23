@@ -18,7 +18,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
-            --ignore-platform-req=ext-zip
+                --ignore-platform-req=ext-zip
 
       - name: Link to the storage
         run: php artisan storage:link
@@ -41,3 +41,10 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
+
+      - name: Undo push if tests fail
+        run: |
+          if [ ${{ job.status }} == 'failure' ]; then
+            git reset --hard HEAD~1
+            git push --force
+          fi
