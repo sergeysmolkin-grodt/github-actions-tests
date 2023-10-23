@@ -26,7 +26,7 @@ class AppointmentController extends Controller
     )
     {
         parent::__construct();
-        //change2fffff
+        //
     }
     /**
      * Display a listing of the resource.
