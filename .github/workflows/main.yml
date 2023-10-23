@@ -50,3 +50,4 @@ jobs:
             git reset --hard HEAD~1
             git push --force
           fi
+        shell: bash
