@@ -41,7 +41,7 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
-        continue-on-error: true
+
 
       - name: Revert commit if tests are failed (tests that failed has 2 status code)
         run: |
