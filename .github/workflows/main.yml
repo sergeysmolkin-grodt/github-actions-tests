@@ -54,6 +54,7 @@ jobs:
             git reset --hard HEAD~1
             git push -f origin main
           fi
+
         if: failure()
 
 
