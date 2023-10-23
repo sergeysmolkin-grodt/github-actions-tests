@@ -49,7 +49,5 @@ jobs:
       - name: Revert Commit if Tests Fail
         if: steps.tests.outputs.failed == 'true'
         run: |
-          git config user.name 'GitHub Actions'
-          git config user.email 'actions@github.com'
           git reset --hard HEAD~1
           git push --force
