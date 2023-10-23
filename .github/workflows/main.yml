@@ -8,6 +8,7 @@ on:
 
 jobs:
   deploy:
+    name: Build & Testing
     runs-on: ubuntu-latest
 
     steps:
