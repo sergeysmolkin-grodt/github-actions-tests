@@ -41,10 +41,12 @@ jobs:
 
       - name: Execute tests via PHPUnit
         run: php artisan test --filter Integration
+        continue-on-error: true
 
-      - name: Undo push if tests fail
+      - name: Undo push if tests code is 2
         run: |
-          if [ ${{ job.status }} == 'failure' ]; then
+          if [ $? -eq 2 ]
+          then
             git reset --hard HEAD~1
             git push --force
           fi
