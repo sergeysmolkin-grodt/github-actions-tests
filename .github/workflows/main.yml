@@ -43,10 +43,13 @@ jobs:
         run: php artisan test --filter Integration
         continue-on-error: true
 
-      - name: Undo push if tests code is 2
-        run: |
-          if [ $? -eq 2 ]
-          then
-            git reset --hard HEAD~1
-            git push --force
-          fi
+      - name: Do push if tests passed
+        uses: actions/github-script@v3
+        with:
+          script: |
+            set -e
+            cd /data/ifal-backend
+            git checkout main
+            git pull origin main
+            docker compose up -d --build
+            docker restart app
