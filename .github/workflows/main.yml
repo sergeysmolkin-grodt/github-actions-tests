@@ -46,6 +46,7 @@ jobs:
       - name: Execute tests via PHPUnit
         id: tests
         run: php artisan test --filter Integration || echo "FAILED=true" >> $GITHUB_ENV
+        continue-on-error: false
 
       - name: Revert Commit if Tests Fail
         if: ${{ env.FAILED == 'true' }}
