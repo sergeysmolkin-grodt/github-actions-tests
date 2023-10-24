@@ -46,3 +46,6 @@ jobs:
       - name: Execute tests via PHPUnit
         id: tests
         run: php artisan test --filter Integration
+
+      - name: Text
+        run: echo ${{ steps.tests.outputs.result }}
