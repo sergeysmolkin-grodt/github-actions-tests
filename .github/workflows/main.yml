@@ -51,6 +51,8 @@ jobs:
             echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
             echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
 
+            echo "ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}" >> .env
+
       - name: Set up Firebase keys and configuration
         run:  |
             mkdir -p firebase-keys
