@@ -46,10 +46,15 @@ jobs:
             echo "ZOOM_APP_DOWNLOAD_LINK=${{ secrets.ZOOM_APP_DOWNLOAD_LINK }}" >> .env
             echo "ZOOM_MICROPHONE_TEST_LINK=${{ secrets.ZOOM_MICROPHONE_TEST_LINK }}" >> .env
 
-            echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> .env
-            echo "FCM_API_URL=${{ secrets.FCM_API_URL }}" >> .env
-            echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
-            echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
+
+      - name: Set up Firebase keys and configuration
+        run: |
+          mkdir -p firebase-keys
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
+          echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> .env
+          echo "FCM_API_URL=${{ secrets.FCM_API_URL }}" >> .env
+          echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
+          echo "FIREBASE_KEY_PATH=./firebase-keys/google-services.json" >> .env
 
       - name: Generate app key
         run: php artisan key:generate
