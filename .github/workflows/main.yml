@@ -47,10 +47,14 @@ jobs:
             echo "ZOOM_MICROPHONE_TEST_LINK=${{ secrets.ZOOM_MICROPHONE_TEST_LINK }}" >> .env
 
 
+      - name: Create google-services.json
+        run: |
+          python -c "import json; data = ${{ secrets.GOOGLE_SERVICES_JSON }}; with open('firebase-keys/google-services.json', 'w') as f: json.dump(data, f)"
+        working-directory: .
+
       - name: Set up Firebase keys and configuration
         run: |
-          mkdir -p firebase-keys
-          printf "%s" "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
+
           echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> .env
           echo "FCM_API_URL=${{ secrets.FCM_API_URL }}" >> .env
           echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
