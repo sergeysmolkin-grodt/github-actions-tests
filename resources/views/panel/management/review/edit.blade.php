@@ -32,7 +32,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="projectinput1">Image</label>
-                                                    <input type="file" class="form-control-file" id="exampleInputFile" name="review_image" accept="" >
+                                                    <input type="file" class="form-control-file" id="exampleInputFile" name="image" accept="" >
                                                 </div>
                                             </div>
                                         </div>

@@ -9,6 +9,8 @@ use App\Models\AvailabilityException;
 use App\Models\Availability;
 use App\Models\UserDevice;
 use App\Repositories\UserRepository;
+use App\Repositories\StudentRepository;
+use App\Repositories\TeacherRepository;
 use App\Models\User;
 use App\Traits\DateTimeTrait;
 use Illuminate\Support\Facades\Hash;
@@ -19,12 +21,12 @@ class AuthService
 
     use DateTimeTrait;
 
-    protected $userRepository;
-
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
+    public function __construct(
+        protected UserRepository $userRepository,
+        protected StudentRepository $studentRepository,
+        protected TeacherRepository $teacherRepository,
+    )
+    {}
 
     public function loginStudentValidation(array $requestData): string|User
     {
@@ -71,11 +73,12 @@ class AuthService
         $this->userRepository->createUserDetails($user->id, $requestData);
 
         if ($requestData['role'] == 'teacher') {
-            $this->userRepository->createTeacherOptions($user->id);
+            $this->teacherRepository->createTeacherOptions($user->id);
         }
 
         if ($requestData['role'] == 'student') {
-            $this->userRepository->createStudentOptions($user->id);
+            $this->studentRepository->createStudentOptions($user->id);
+            $this->studentRepository->createStudentRemindersOptions($user->id);
         }
 
         return $user;

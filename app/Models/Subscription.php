@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\hasManyThrough;
@@ -18,10 +19,12 @@ class Subscription extends Model
         'plan_id',
         'status',
         'is_active',
-        'is_pause',
+        'type',
+        'is_paused',
         'start_date',
         'end_date',
-
+        'paypal_subscription_id',
+        'renewal_count'
     ];
 
     protected $hidden = [
@@ -29,7 +32,7 @@ class Subscription extends Model
         'updated_at'
     ];
 
-    public function plan(): hasOne
+    public function plan(): belongsTo
     {
         return $this->belongsTo(Plan::class, 'plan_id');
     }

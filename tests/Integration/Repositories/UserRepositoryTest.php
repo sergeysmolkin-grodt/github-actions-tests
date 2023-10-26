@@ -6,7 +6,6 @@ use App\Models\Plan;
 use App\Models\Provider;
 use App\Models\StudentOptions;
 use App\Models\Subscription;
-use App\Models\TeacherOptions;
 use App\Models\User;
 use App\Models\UserDetails;
 use App\Repositories\UserRepository;
@@ -31,9 +30,9 @@ final class UserRepositoryTest extends TestCase
     use WithFaker;
 
     protected UserRepository $userRepository;
+
     protected Collection $users;
     protected User $detailedUser;
-
 
     #[Before]
     public function setUp() : void
@@ -57,7 +56,7 @@ final class UserRepositoryTest extends TestCase
             'user_id' => $this->detailedUser->id,
         ]);
 
-        $this->userRepository = new UserRepository();
+        $this->userRepository = new UserRepository(new User());
     }
 
     #[Test]
@@ -112,34 +111,6 @@ final class UserRepositoryTest extends TestCase
     public function testGetUserByMobileReturnsUserInstance()
     {
         $user = $this->userRepository->getUserByMobile(implode(',', $this->detailedUser->userDetails()->pluck('mobile')->toArray()));
-
-        $this->assertInstanceOf(User::class, $user);
-    }
-
-    #[Test]
-    public function testGetUserWithStudentOptionsReturnsNullIfNotFound()
-    {
-        $userId = 'nonexistent_user_id227';
-
-        $user = $this->userRepository->getUserWithStudentOptions($userId);
-
-        $this->assertNull($user);
-    }
-
-    #[Test]
-    public function testGetUserWithStudentOptionsSuccessfully()
-    {
-        $user = $this->userRepository->getUserWithStudentOptions($this->detailedUser->id);
-
-        $user->userDetails
-            ? $this->assertNotNull($user->userDetails)
-            : self::assertNull($user->userDetails);
-    }
-
-    #[Test]
-    public function testGetUserWithStudentOptionsReturnsUserInstance()
-    {
-        $user = $this->userRepository->getUserWithStudentOptions($this->detailedUser->id);
 
         $this->assertInstanceOf(User::class, $user);
     }
@@ -270,44 +241,6 @@ final class UserRepositoryTest extends TestCase
         $this->assertDatabaseHas('user_details',$userDetails->toArray());
     }
 
-    #[Test]
-    public function testCreateTeacherOptionsSuccessfully()
-    {
-        $user = Arr::random($this->users->toArray());
-
-        $teacherOptions = $this->userRepository->createTeacherOptions($user['id']);
-
-        $this->assertInstanceOf(TeacherOptions::class, $teacherOptions);
-
-        $this->assertEquals($user['id'], $teacherOptions->user_id);
-
-        $this->assertDatabaseHas('teacher_options',$teacherOptions->toArray());
-
-    }
-
-    #[Test]
-    public function testCreateStudentOptionsSuccessfully()
-    {
-        $user = Arr::random($this->users->toArray());
-
-        $studentOptions = $this->userRepository->createStudentOptions($user['id']);
-
-        $this->assertInstanceOf(StudentOptions::class, $studentOptions);
-
-        $this->assertEquals($user['id'], $studentOptions->user_id);
-
-        $this->assertDatabaseHas('student_options',$studentOptions->toArray());
-
-    }
-
-    #[Test]
-    public function testDestroyStudentOptionsSuccessfully()
-    {
-
-        $this->userRepository->destroyStudentOptions($this->detailedUser->id);
-
-        $this->assertDatabaseMissing('student_options', ['user_id' => $this->detailedUser->id]);
-    }
 
     #[Test]
     public function testGetUserOrCreateActuallyCreatesNewUser()
@@ -399,7 +332,7 @@ final class UserRepositoryTest extends TestCase
     #[Test]
     public function testUpdateUserRoleSuccessfully()
     {
-        Artisan::call('db:seed --class=RoleSeeder');
+        Artisan::call('db:seed --class=RolesSeeder');
 
         $role = 'admin';
 
@@ -412,7 +345,7 @@ final class UserRepositoryTest extends TestCase
     #[Test]
     public function testGetUserRoleByEmailReturnsRole()
     {
-        Artisan::call('db:seed --class=RoleSeeder');
+        Artisan::call('db:seed --class=RolesSeeder');
 
         $this->detailedUser->assignRole($roleName = 'admin');
 
@@ -422,47 +355,6 @@ final class UserRepositoryTest extends TestCase
         $this->assertEquals($roleName, $role->name);
     }
 
-    #[Test]
-    public function testTeacherAllowsTrialReturnsTrueWhenOptionsEnabled()
-    {
-        Artisan::call('db:seed --class=RoleSeeder');
-
-        $this->detailedUser->assignRole('teacher');
-
-        $this->detailedUser->teacherOptions()->create([
-            'user_id' => $this->detailedUser->id,
-            'bio' => $this->faker->text(),
-            'attainment' => $this->faker->text(),
-            'allows_trial' => 1,
-            'can_be_booked' => 1,
-            'verification_status' => 'pending'
-        ]);
-
-        $allowsTrial = $this->userRepository->teacherAllowsTrial($this->detailedUser->id);
-
-        $this->assertTrue($allowsTrial);
-    }
-
-    #[Test]
-    public function testTeacherAllowsTrialReturnsFalseWhenOptionsDoNotAllowTrial()
-    {
-        Artisan::call('db:seed --class=RoleSeeder');
-
-        $this->detailedUser->assignRole('teacher');
-
-        $this->detailedUser->teacherOptions()->create([
-            'user_id' => $this->detailedUser->id,
-            'bio' => $this->faker->text(),
-            'attainment' => $this->faker->text(),
-            'allows_trial' => 0,
-            'can_be_booked' => 1,
-            'verification_status' => 'pending'
-        ]);
-
-        $allowsTrial = $this->userRepository->teacherAllowsTrial($this->detailedUser->id);
-
-        $this->assertFalse($allowsTrial);
-    }
 
     #[Test]
     public function testUpdateUserSuccessfully()
@@ -506,7 +398,7 @@ final class UserRepositoryTest extends TestCase
     {
         $this->expectException(ModelNotFoundException::class);
 
-        $nonExistentUserId = 'nonexistent_id9966';
+        $nonExistentUserId = rand();
 
         $this->userRepository->deleteUser($nonExistentUserId);
     }

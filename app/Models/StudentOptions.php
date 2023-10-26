@@ -18,7 +18,8 @@ class StudentOptions extends Model
         'count_free_sessions',
         'count_gift_sessions',
         'count_recurring_gift_sessions',
-        'count_trial_sessions'
+        'count_trial_sessions',
+        'has_email_notification'
     ];
 
     protected $hidden = [

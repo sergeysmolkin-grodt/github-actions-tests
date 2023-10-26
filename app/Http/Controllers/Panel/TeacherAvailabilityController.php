@@ -20,6 +20,7 @@ class TeacherAvailabilityController extends Controller
      * @param AvailabilityExceptionService $availabilityExceptionService
      * @param TeacherRepository $teacherRepository
      * @param AppointmentRepository $appointmentRepository
+     * @param AvailabilityExceptionRepository $availabilityExceptionRepository
      */
     public function __construct(
         protected AvailabilityService $availabilityService,

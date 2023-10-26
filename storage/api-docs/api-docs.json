@@ -131,6 +131,90 @@
                 }
             }
         },
+        "/api/subscription": {
+            "post": {
+                "tags": [
+                    "Subscription"
+                ],
+                "summary": "Create a new subscription",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "plan_id": {
+                                        "description": "The ID of the subscription plan",
+                                        "type": "string",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Subscription created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Subscription created successfully"
+                                        },
+                                        "paypal_subscription_id": {
+                                            "type": "string",
+                                            "example": "I-4MJXMAR5RBVT"
+                                        },
+                                        "approval_url": {
+                                            "type": "string",
+                                            "example": "https://www.sandbox.paypal.com/webapps/billing/subscriptions?ba_token=BA-7JH701934E382752P"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The selected plan id is invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "planId": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The selected plan id is invalid."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "uniqueBearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/auth/register": {
             "post": {
                 "tags": [

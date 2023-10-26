@@ -23,7 +23,7 @@ class UpdateStoreReview extends FormRequest
     public function rules()
     {
         return [
-            'review_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'string|max:255',
             'location' => 'string|max:255',
             'review' => 'string',

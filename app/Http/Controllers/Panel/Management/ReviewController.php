@@ -16,7 +16,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\TeacherReview;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Http\Requests\Web\StoreReview;
+use App\Http\Requests\Web\CreateReviewRequest;
 
 class ReviewController extends Controller
 {
@@ -41,19 +41,19 @@ class ReviewController extends Controller
     }
 
     /**
-     * Display edit page of specific user.
+     * Display edit page of specific review.
      */
     public function edit(string $id): View|Application|Factory
     {
         return view('panel.management.review.edit', ['review' => TeacherReview::find($id)]);
     }
 
-    public function store(StoreReview $request)
+    public function store(CreateReviewRequest $request)
     {
         $validated = $request->validated();
 
-        if ($request->hasFile('review_image')) {
-            $validated['image'] = $this->uploadFile($request->file('review_image'), 'teacher_reviews', 'public');
+        if ($request->hasFile('image')) {
+            $validated['image'] = $this->uploadFile($request->file('image'), 'teacher_reviews', 'public');
         }
 
         if (TeacherReview::create($validated)) {
@@ -70,11 +70,11 @@ class ReviewController extends Controller
         $teacherReview = TeacherReview::find($id);
         $validated = $request->validated();
 
-        if ($request->hasFile('review_image')) {
+        if ($request->hasFile('image')) {
             if ($teacherReview->image) {
                 Storage::disk('public')->delete('teacher_reviews/' . $teacherReview->image);
             }
-            $validated['image'] = $this->uploadFile($request->file('review_image'), 'teacher_reviews', 'public');
+            $validated['image'] = $this->uploadFile($request->file('image'), 'teacher_reviews', 'public');
         }
 
         if ($teacherReview->update($validated)) {

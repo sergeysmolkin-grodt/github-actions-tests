@@ -13,13 +13,19 @@ use App\Http\Filters\Teacher\ByTimeOfDay;
 use App\Models\User;
 use App\Models\UserDetails;
 use App\Repositories\UserRepository;
+use App\Repositories\StudentRepository;
+use App\Repositories\TeacherRepository;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserService
 {
-    public function __construct(private UserRepository $userRepository) {}
+    public function __construct(
+        protected UserRepository $userRepository,
+        protected StudentRepository $studentRepository,
+        protected TeacherRepository $teacherRepository,
+    ) {}
 
     protected array $generalFilters = [
         ByEmail::class,
@@ -94,8 +100,8 @@ class UserService
 
     private function updateTeacherAndStudentOptions(int $userId): void
     {
-        $this->userRepository->destroyStudentOptions($userId);
-        $this->userRepository->createTeacherOptions($userId);
+        $this->studentRepository->destroyStudentOptions($userId);
+        $this->teacherRepository->createTeacherOptions($userId);
     }
 
     private function updateUserDetails(int $userId, string $gender, string $birthDate): void

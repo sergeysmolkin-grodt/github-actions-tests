@@ -4,7 +4,7 @@ namespace App\Http\Requests\API;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BookAppointmentRequest extends IfalApiRequest
+class BookAppointmentRequest extends FormRequest
 {
 
     /**

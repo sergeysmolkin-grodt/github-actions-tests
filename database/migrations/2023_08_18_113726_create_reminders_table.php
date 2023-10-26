@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('model_type');
             $table->timestamp('date_time');
             $table->string('type');
+            $table->string('message_type');
             $table->text('note');
             $table->timestamps();
         });

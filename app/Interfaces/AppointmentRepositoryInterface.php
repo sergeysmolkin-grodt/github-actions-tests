@@ -16,6 +16,6 @@ interface AppointmentRepositoryInterface
     public function getDateTeacherSubscribers(int $teacherId, string $date): Collection;
     public function getTotalCompletedSessionsForTeacher(int $id): int|null;
     public function getTotalAppointmentsIdsForTeacher(int $id): SupportCollection|null;
-    public function getUpcomingAppointmentsForTeacherByDayOfWeek(int $teacherId, int $dayOfWeek): Collection|null;
+    public function getUpcomingAppointmentsForTeacherByDayOfWeekNumber(int $teacherId, int $dayOfWeek): Collection|null;
     public function getAppointmentsForTeacherByDate(int $teacherId, string $date): Collection|null;
 }

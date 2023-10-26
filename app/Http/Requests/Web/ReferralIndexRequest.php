@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\API;
+namespace App\Http\Requests\Web;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IfalApiRequest extends FormRequest
+class ReferralIndexRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -19,12 +20,12 @@ class IfalApiRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'userId' => 'required|int',
-            'language' => 'string',
-            'deviceId' => 'string'
+            'from_date' => 'date|nullable',
+            'to_date' => 'date|nullable',
+            'is_gift_sessions_assigned' => 'string|nullable|in:1,0'
         ];
     }
 }

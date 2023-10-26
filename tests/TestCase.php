@@ -26,7 +26,7 @@ abstract class TestCase extends BaseTestCase
             'lastname' => fake()->name(),
             'email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$'),
             'password' => Str::random(10),
-            'mobile' => fake()->phoneNumber(),
+            'mobile' => Str::random(10),
             'ageGroup' => Arr::random(['adult', 'teen', 'kid']),
             'birthDate' => fake()->date(),
             'gender' => Arr::random(['male','female']),
@@ -52,7 +52,7 @@ abstract class TestCase extends BaseTestCase
     protected static function addStudentForAppointment() : User {
         $user = User::factory()->create();
         $user->assignRole('teacher');
-
+        $user->userDetails()->create(['user_id' => $user->id,'time_zone' => 'UTC']);
         $plan = Plan::factory()->create();
         StudentOptions::factory()->create(['user_id' => $user->id])->toArray();
         Subscription::factory()->create(['user_id' => $user->id,'plan_id' => $plan->id]);

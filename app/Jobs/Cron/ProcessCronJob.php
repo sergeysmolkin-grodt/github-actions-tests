@@ -2,17 +2,22 @@
 
 namespace App\Jobs\Cron;
 
+use App\Interfaces\ProcessCron;
+use App\Models\Reminder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
-use App\Interfaces\ProcessCron;
+use Illuminate\Queue\SerializesModels;
+use App\Traits\DateTimeTrait;
 
 abstract class ProcessCronJob implements ShouldQueue, ProcessCron
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, DateTimeTrait;
 
-    abstract public function handle(): void;
+    protected array $requestData;
+    public function __construct(Request $request) {
+        $this->requestData = $request->all();
+    }
 }

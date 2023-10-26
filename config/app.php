@@ -186,7 +186,6 @@ return [
         App\Providers\RepositoryServiceProvider::class,
         \SocialiteProviders\Manager\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Illuminate\Filesystem\FilesystemServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -203,13 +202,17 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Storage' => Illuminate\Support\Facades\Storage::class,
     ])->toArray(),
 
     'age_groups' => [
         'adult' => 'Adult',
         'teen' => 'Teen',
         'kid' => 'Kid',
+    ],
+
+    'payment_methods' => [
+        'paypal' => 'PayPal',
+        'icredit' => 'iCredit'
     ],
 
     'file_extensions' => ["jpg", "JPG", "jpeg", "JPEG", "png", "PNG", "HEIC", "heic"],
@@ -238,7 +241,8 @@ return [
     'whatsapp_notification' => env('WHATSAPP_NOTIFICATION', true),
     'notifications_types' => [
         'appointment' => 'APPOINTMENT',
-        'session_notify_users' => 'SESSION_NOTIFY_USERS'
+        'session_notify_users' => 'SESSION_NOTIFY_USERS',
+        'reminder' => 'REMINDER',
     ],
     'device_types' => [
         'android' => 'ANDROID',
@@ -252,45 +256,12 @@ return [
         'email' => 'EMAIL'
     ],
     'additional_auto_schedule_booking_days' => 30,
-    'appointment_reminders' => [
-        [
-            'note' => 'This reminder will be run before 10 minutes of the session start.',
-            'type' => 'email',
-            'minutes' => 10
-        ],
-        [
-            'note' => 'This reminder will be run before 2.5 minutes of the session start.',
-            'type' => 'ivr',
-            'minutes' => 2.5
-        ],
-        [
-            'note' => 'This reminder will be run before 30 minutes of the session start.',
-            'type' => 'whatsapp',
-            'minutes' => 30
-        ],
-        [
-            'note' => 'This reminder will be run before 3 hours of the session start.',
-            'type' => 'whatsapp',
-            'minutes' => 180
-        ],
-        [
-            'note' => 'This reminder will be run before 5 MINUTES of the session start.',
-            'type' => 'whatsapp',
-            'minutes' => 5
-        ],
-        [
-            'note' => 'This reminder will be run before 2 hours of the session start.',
-            'type' => 'ivr',
-            'minutes' => 120
-        ],
-    ],
-    'day_of_week_number' => [
-        'monday' => 1,
-        'tuesday' => 2,
-        'wednesday' => 3,
-        'thursday' => 4,
-        'friday' => 5,
-        'saturday' => 6,
-        'sunday' => 7,
-    ],
+    'ifal_fb_link' => 'https://facebook.com/ifalilil',
+    'ifal_instagram_link' => 'https://www.instagram.com/ifal_app/',
+    'country_codes' => [
+        'es' => '+34',
+        'de' => '+49',
+        'pl' => '+48',
+        'hw' => '+972',
+    ]
 ];

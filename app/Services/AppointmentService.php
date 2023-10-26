@@ -9,6 +9,7 @@ use App\Exceptions\CouldNotCreateZoomMeeting;
 use App\Exceptions\CouldNotDeleteZoomMeeting;
 use App\Exceptions\CouldNotSendPushNotification;
 use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\TeacherRepositoryInterface;
 use App\Interfaces\AppointmentRepositoryInterface;
 use App\Interfaces\SubscriptionRepositoryInterface;
 use App\Mail\Appointments\SessionScheduled;
@@ -37,6 +38,7 @@ class AppointmentService
     public function __construct(
         protected AppointmentServicesAggregator $appointmentServicesAggregator,
         protected UserRepositoryInterface $userRepository,
+        protected TeacherRepositoryInterface $teacherRepository,
         protected AppointmentRepositoryInterface $appointmentRepository,
         protected SubscriptionRepositoryInterface $subscriptionRepository
     ) {}
@@ -177,7 +179,7 @@ class AppointmentService
         }
 
         // Check if Teacher can be booked
-        if (! $this->userRepository->teacherCanBeBooked($this->appointmentData->teacherId)) {
+        if (! $this->teacherRepository->teacherCanBeBooked($this->appointmentData->teacherId)) {
             return __("We are updating this teacher's schedule, therefore, we are unable to schedule for you a lesson at this time. Please try again within a few hours :) Thank you for understanding.");
         }
 
@@ -222,7 +224,7 @@ class AppointmentService
 
         // Trial first free session
         if ($studentOptions->count_trial_sessions > 0) {
-            if (! $this->userRepository->teacherAllowsTrial($this->appointmentData->teacherId)) {
+            if (! $this->teacherRepository->teacherAllowsTrial($this->appointmentData->teacherId)) {
                 throw new CouldNotBookAppointment(__('This teacher is not for trial lesson! Please try to book with another teacher.'));
             }
             return 'trial_session';
@@ -299,7 +301,6 @@ class AppointmentService
                 payload: $payload,
                 userId: $teacherId
             );
-
         } catch(CouldNotSendPushNotification $e) {
             return $e->getMessage();
         }
@@ -309,13 +310,13 @@ class AppointmentService
 
     public function getAppointmentEmailSubject(User $user, Appointment $appointment): string
     {
-        match($user->country_code) {
-            '+34' => $country = 'Spain',
-            '+49' => $country = 'Germany',
-            '+48' => $country = 'Poland',
+
+        match($user->userDetails->country_code) {
+            config('app.country_codes.es') => $country = 'Spain',
+            config('app.country_codes.de') => $country = 'Germany',
+            config('app.country_codes.pl') => $country = 'Poland',
             default => $country = '',
         };
-
         if (! $country) {
             return 'New free session scheduled by ' . $user->firstname . ' ' . $user->lastname . ' to ' . $this->getDMYSlashFormat($appointment->date) . ' and ' . $appointment->from . '-' . $appointment->to;
         }
@@ -326,10 +327,11 @@ class AppointmentService
     public function setAppointmentReminders(Appointment $appointment): null|array
     {
         $logNotes = [];
-        foreach (config('app.appointment_reminders') as $reminder) {
+        foreach (config('reminders.reminders.appointment') as $reminder) {
             if (!($this->createReminder(
                 appointment: $appointment,
                 type: $reminder['type'],
+                messageType: $reminder['message_type'],
                 note: $reminder['note'],
                 dateTime: $this->getCarbonInstance("{$appointment->date} {$appointment->from}")->subMinutes($reminder['minutes'])->subSeconds(2)
             )) instanceof Reminder) {
@@ -344,7 +346,7 @@ class AppointmentService
         return null;
     }
 
-    public function createReminder(Appointment $appointment, string $type, string $note, string $dateTime): Reminder|string
+    public function createReminder(Appointment $appointment, string $type, string $messageType, string $note, string $dateTime): Reminder|string
     {
         try {
             $reminder = Reminder::create([
@@ -352,6 +354,7 @@ class AppointmentService
                 'model_type' => get_class($appointment),
                 'date_time' => $dateTime,
                 'type' => $type,
+                'message_type' => $messageType,
                 'note' => $note
             ]);
         } catch (ValidationException $e) {
@@ -430,7 +433,7 @@ class AppointmentService
         }
 
         // Send Android Push Notifications via Firebase Cloud Messaging
-        if (false) {
+        if (config('app.push_notification')) {
             $this->sendPushNotificationsToTeacher(
                 student:       $user,
                 appointmentId: $appointment->id,

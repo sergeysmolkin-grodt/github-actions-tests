@@ -7,9 +7,9 @@ use App\Models\Provider;
 use App\Models\Subscription;
 use App\Models\TeacherOptions;
 use App\Models\StudentOptions;
+use App\Models\StudentRemindersOptions;
 use App\Models\User;
 use App\Models\UserDetails;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Laravel\Socialite\Two\User as SocialiteUser;
@@ -19,9 +19,13 @@ class UserRepository implements UserRepositoryInterface
 {
     use HasRoles;
 
+    public function __construct(
+        private User $userModel,
+    ) {}
+
     public function getUserByEmail(string $email): User|null
     {
-        return User::where('email',  $email)->first();
+        return $this->userModel->where('email',  $email)->first();
     }
 
     public function getUserByMobile(string $mobile): User|null
@@ -31,14 +35,9 @@ class UserRepository implements UserRepositoryInterface
         return $userDetails->user;
     }
 
-    public function getUserWithStudentOptions(string $id): User|null
-    {
-        return User::with(['userDetails', 'studentOptions'])->find($id);
-    }
-
     public function createUserOrUpdate(array $userData): User
     {
-        return User::updateOrCreate(
+        return $this->userModel->updateOrCreate(
             [
                 'email' => $userData['email']
             ],
@@ -52,7 +51,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function createUser(array $userData): User
     {
-        return User::create([
+        return $this->userModel->create([
             'firstname' => $userData['firstname'],
             'lastname' => $userData['lastname'],
             'email' => $userData['email'],
@@ -80,28 +79,9 @@ class UserRepository implements UserRepositoryInterface
         return UserDetails::create($userDetails);
     }
 
-    public function createTeacherOptions(int $userId): TeacherOptions
-    {
-        return TeacherOptions::create([
-            'user_id' => $userId,
-        ]);
-    }
-
-    public function createStudentOptions(int $userId): StudentOptions
-    {
-        return StudentOptions::create([
-            'user_id' => $userId,
-        ]);
-    }
-
-    public function destroyStudentOptions(int $userId): bool
-    {
-        return StudentOptions::where('user_id', $userId)->delete();
-    }
-
     public function getUserOrCreate(SocialiteUser $userData): User|null
     {
-        return User::firstOrCreate(
+        return $this->userModel->firstOrCreate(
             [
                 'email' => $userData->getEmail()
             ],
@@ -125,12 +105,12 @@ class UserRepository implements UserRepositoryInterface
     }
     public function updateUserRole(int $userId, string $role): void
     {
-        User::findOrFail($userId)->assignRole($role);
+        $this->userModel->findOrFail($userId)->assignRole($role);
     }
 
     public function getRoleByEmail(string $email): Role|null
     {
-        return User::where('email', $email)
+        return $this->userModel->where('email', $email)
             ->first()
             ->roles()
             ->first();
@@ -138,35 +118,15 @@ class UserRepository implements UserRepositoryInterface
 
     public function getActiveUserById(int $id): User|null
     {
-        return User::where('id', $id)->where('is_active', 1)->first();
+        return $this->userModel->where('id', $id)->where('is_active', 1)->first();
     }
 
     public function getUserActiveSubscription(int $userId): Subscription|null
     {
-        return User::findOrFail($userId)
+        return $this->userModel->findOrFail($userId)
                    ->studentSubscription()
                    ->where('is_active', 1)
                    ->first();
-    }
-
-    public function teacherAllowsTrial(int $teacherId): bool
-    {
-        $teacherOptions = User::findOrFail($teacherId)->teacherOptions;
-
-        if (! empty($teacherOptions) && $teacherOptions->allows_trial) {
-            return true;
-        }
-        return false;
-    }
-
-    public function teacherCanBeBooked(int $teacherId): bool
-    {
-        $teacherOptions = User::findOrFail($teacherId)->teacherOptions;
-
-        if (! empty($teacherOptions) && $teacherOptions->can_be_booked) {
-            return true;
-        }
-        return false;
     }
 
     public function updateUser(array $userData, User $user) : void
@@ -179,20 +139,20 @@ class UserRepository implements UserRepositoryInterface
         $userDetails->update($data);
     }
 
-    public function deleteUser(string $id) : bool
+    public function deleteUser(int $id) : bool
     {
-        return User::findOrFail($id)->delete();
+        return $this->userModel->findOrFail($id)->delete();
     }
 
     public function getUserById(int $id): User
     {
-        return User::findOrFail($id);
+        return $this->userModel->findOrFail($id);
     }
 
     public function verifyUserPhoneNumber($phoneNumber): void
     {
         $userDetail = UserDetails::where('mobile', $phoneNumber)->first();
-        $user = User::find($userDetail->user_id);
+        $user = $this->userModel->find($userDetail->user_id);
         $user->is_phone_verified = true;
         $user->save();
     }

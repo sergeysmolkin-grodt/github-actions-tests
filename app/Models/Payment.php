@@ -9,7 +9,7 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'model_id', 'model_type', 'payment_method', 'payment_date', 'amount', 'status'];
+    protected $fillable = ['user_id', 'model_id', 'model_type', 'payment_method', 'transaction_data','payment_date', 'amount', 'status'];
 
     protected $hidden = [
         'created_at',

@@ -5,11 +5,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\ScheduleTimeRequest;
 use App\Interfaces\AutoScheduleRepositoryInterface;
-use App\Jobs\Cron\ProcessStudentAutoSchedule;
 use App\Services\AutoScheduleService;
+use App\Services\SubscriptionService;
 use App\Traits\DateTimeTrait;
 use Illuminate\Http\JsonResponse;
-use App\Models\Subscription;
+use Illuminate\Support\Facades\Auth;
 
 class AutoScheduleController extends Controller
 {
@@ -18,6 +18,7 @@ class AutoScheduleController extends Controller
     public function __construct(
         protected AutoScheduleService $autoScheduleService,
         protected AutoScheduleRepositoryInterface $autoScheduleRepository,
+        protected SubscriptionService $subscriptionService
     )
     {
         parent::__construct();
@@ -47,9 +48,9 @@ class AutoScheduleController extends Controller
         $validated = $request->validated();
 
         try {
-            $this->autoScheduleService->setAutoScheduleTime($validated);
+            $this->autoScheduleService->setAutoScheduleTime($validated, $this->userId);
 
-           // $this->createUpcomingSubscription();
+            $this->subscriptionService->createUpcomingSubscription($this->userId);
 
             $processors = config('processors');
             $processor = app($processors['processStudentAutoSchedule']);
@@ -84,10 +85,10 @@ class AutoScheduleController extends Controller
     {
         $validated = $request->validated();
 
-        $this->autoScheduleService->logAndRemoveAutoScheduleTime($validated['userId']);
+        $this->autoScheduleService->logAndRemoveAutoScheduleTime($this->userId);
 
         try {
-            $this->autoScheduleService->setAutoScheduleTime($validated);
+            $this->autoScheduleService->setAutoScheduleTime($validated, $this->userId);
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }
@@ -98,9 +99,9 @@ class AutoScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $userId): JsonResponse
+    public function destroy(): JsonResponse
     {
-        if (! is_null($deletedResponse = $this->autoScheduleRepository->remove($userId))) {
+        if (! is_null($deletedResponse = $this->autoScheduleRepository->remove($this->userId))) {
             return $this->respondError($deletedResponse);
         }
 

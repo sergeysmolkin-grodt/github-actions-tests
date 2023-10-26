@@ -50,7 +50,7 @@ class RegisterRequest extends FormRequest
             'OSVersion' => 'nullable|string',
             'brand' => 'nullable|string',
             'model' => 'nullable|string',
-            'referId' => 'nullable|string',
+            'referralId' => 'nullable|string',
             'socialLoginId' => 'required_unless:loginType,NORMAL|string',
             'role' => 'required|string|in:student,teacher'
         ];

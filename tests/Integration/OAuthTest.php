@@ -92,17 +92,9 @@ class OAuthTest extends TestCase
             ->andReturn(null);
 
 
-        Auth::shouldReceive('loginUsingId')
-            ->withArgs(function ($userId) {
-                return is_numeric($userId) && $userId > 0;
-            });
-
-
-        $response = $this->get('/login/google/callback');
-
+        $response = $this->get("/login/$provider/callback");
 
         $response->assertRedirect(route('login'))->isRedirection();
-
 
         $response->assertStatus(Response::HTTP_FOUND);
     }

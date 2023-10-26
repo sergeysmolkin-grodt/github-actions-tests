@@ -42,5 +42,32 @@ class TeacherRepository implements TeacherRepositoryInterface
     {
         $teacherOptions->update($data);
     }
+
+    public function createTeacherOptions(int $userId): TeacherOptions
+    {
+        return TeacherOptions::create([
+            'user_id' => $userId,
+        ]);
+    }
+
+    public function teacherAllowsTrial(int $teacherId): bool
+    {
+        $teacherOptions = $this->userModel->findOrFail($teacherId)->teacherOptions;
+
+        if (! empty($teacherOptions) && $teacherOptions->allows_trial) {
+            return true;
+        }
+        return false;
+    }
+
+    public function teacherCanBeBooked(int $teacherId): bool
+    {
+        $teacherOptions = $this->userModel->findOrFail($teacherId)->teacherOptions;
+
+        if (! empty($teacherOptions) && $teacherOptions->can_be_booked) {
+            return true;
+        }
+        return false;
+    }
 }
 

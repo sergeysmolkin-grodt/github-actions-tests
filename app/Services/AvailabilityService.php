@@ -6,10 +6,12 @@ use App\DataTransferObjects\AvailabilityData;
 use App\Http\Resources\AvailabilityResource;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\AvailabilityRepository;
+use App\Traits\DateTimeTrait;
 use Illuminate\Support\Facades\Auth;
 
 class AvailabilityService
 {
+    use DateTimeTrait;
     public function __construct(
         protected AppointmentService $appointmentService,
         protected AvailabilityRepository $availabilityRepository,
@@ -52,9 +54,9 @@ class AvailabilityService
             return;
         }
 
-        $appointments = $this->appointmentRepository->getUpcomingAppointmentsForTeacherByDayOfWeek(
+        $appointments = $this->appointmentRepository->getUpcomingAppointmentsForTeacherByDayOfWeekNumber(
             $availability->teacher_id,
-            config("app.day_of_week_number.$availability->day")
+            $this->getDayNumberByName($availability->day)
         );
 
         $currentAdmin = Auth::user();

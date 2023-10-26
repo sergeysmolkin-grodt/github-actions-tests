@@ -1439,7 +1439,6 @@ $('#edit_coach_submit').on('submit', function (event) {
     formData.append('_token', csrf_token);
     formData.append('_method', 'PUT');
 
-    console.log(formData);
     $.ajax({
         url: `${BaseURL}/teachers/${formData.get('id')}`,
         data: formData,
@@ -2378,7 +2377,7 @@ $('#edit_teacher_review').on('submit', function (event) {
         contentType: false,
         beforeSend: function () {
             $('#edit-teacher-review-processing').attr("disabled", true);
-            $('#edit-teacher-review-processing').html('<i class="icon-refresh spinner"></i>&nbsp;&nbsp;Please Wait..!');
+            $('#edit-teacher-review-processing').html('<i`${BaseURL}/management/review` class="icon-refresh spinner"></i>&nbsp;&nbsp;Please Wait..!');
         },
         success: function (response) {
             $('#edit-teacher-review-processing').attr("disabled", false);
@@ -2467,12 +2466,10 @@ $('#submit_teacher_video').on('submit', function (event) {
 
 
     var formData = new FormData($(this).closest('form')[0]);
-    // var ArticalContent = tinymce.get("add_artical_details").getContent();
-    // formData.append('artical_details', ArticalContent);
     formData.append('_token', csrf_token);
 
     $.ajax({
-        url: BaseURLForAdmin + '/teacher_video/addNew',
+        url: `${BaseURL}/management/video`,
         data: formData,
         type: 'POST',
         cache: false,
@@ -2485,7 +2482,7 @@ $('#submit_teacher_video').on('submit', function (event) {
         success: function (response) {
             $('#save-teacher-video-processing').attr("disabled", false);
             $('#save-teacher-video-processing').html('Submit');
-            jsonData = JSON.parse(response);
+            jsonData = response;
             if (jsonData.status == 1) {
                 toastr.success("Success!");
                 setInterval(function () {
@@ -2499,7 +2496,12 @@ $('#submit_teacher_video').on('submit', function (event) {
         error: function (data) {
             $('#save-teacher-video-processing').attr("disabled", false);
             $('#save-teacher-video-processing').html('Submit');
-            toastr.error("Error!");
+            try {
+                const parsedData = JSON.parse(data.responseText);
+                toastr.error(parsedData.message ?? "Error!");
+            } catch (e) {
+                toastr.error("Error!");
+            }
         }
     });
 });
@@ -2509,12 +2511,12 @@ $('#edit_teacher_video').on('submit', function (event) {
 
 
     var formData = new FormData($(this).closest('form')[0]);
-    // var ArticalContent = tinymce.get("edit_artical_details").getContent();
-    // formData.append('artical_details', ArticalContent);
+    var videoId = $('input[name="videoId"]').val();
     formData.append('_token', csrf_token);
+    formData.append('_method', 'PUT');
 
     $.ajax({
-        url: BaseURLForAdmin + '/teacher_video/editVideo',
+        url: `${BaseURL}/management/video/${videoId}`,
         data: formData,
         type: 'POST',
         cache: false,
@@ -2527,7 +2529,7 @@ $('#edit_teacher_video').on('submit', function (event) {
         success: function (response) {
             $('#edit-teacher-video-processing').attr("disabled", false);
             $('#edit-teacher-video-processing').html('Update');
-            jsonData = JSON.parse(response);
+            jsonData = response;
             if (jsonData.status == 1) {
                 toastr.success("Success!");
                 setInterval(function () {
@@ -2541,7 +2543,12 @@ $('#edit_teacher_video').on('submit', function (event) {
         error: function (data) {
             $('#edit-teacher-video-processing').attr("disabled", false);
             $('#edit-teacher-video-processing').html('Update');
-            toastr.error("Error!");
+            try {
+                const parsedData = JSON.parse(data.responseText);
+                toastr.error(parsedData.message ?? "Error!");
+            } catch (e) {
+                toastr.error("Error!");
+            }
         }
     });
 });
@@ -2564,14 +2571,14 @@ function deleteTeacherVideo(videoId) {
         .then((willDelete) => {
             if (willDelete) {
                 $.ajax({
-                    url: BaseURLForAdmin + '/teacher_video/delete',
-                    type: 'POST',
+                    url: `${BaseURL}/management/video/${videoId}`,
+                    type: 'DELETE',
                     data: {
                         '_token': csrf_token,
                         'videoId': videoId
                     },
                     success: function (response) {
-                        jsonData = JSON.parse(response);
+                        jsonData = response;
                         if (jsonData.status == 1) {
                             toastr.success("Success!");
                             setInterval(function () {
@@ -2582,7 +2589,12 @@ function deleteTeacherVideo(videoId) {
                         }
                     },
                     error: function (data) {
-                        swal("Something went wrong!");
+                        try {
+                            const parsedData = JSON.parse(data.responseText);
+                            swal(parsedData.message ?? "Error!");
+                        } catch (e) {
+                            swal("Something went wrong!");
+                        }
                     }
                 });
             }

@@ -60,8 +60,10 @@ class StudentController extends Controller
      */
     public function update(StudentUpdateRequest $request, $id): JsonResponse
     {
+        $validated = $request->validated();
+
         try {
-            $status = $this->studentRepository->update(array_merge($request->all(), ['id' => $id]));
+            $status = $this->studentRepository->update(array_merge($validated, ['id' => $id]));
         } catch (\Exception $exception) {
             return $this->respondWithSuccess([
                 'status' => 0,

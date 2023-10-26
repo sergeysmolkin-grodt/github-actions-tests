@@ -3,8 +3,12 @@
 namespace Tests\Integration\API\Controllers;
 
 
+use App\Http\Controllers\API\UserAuthenticationController;
 use App\Models\User;
 use App\Models\UserDevice;
+use App\Repositories\ReferralRepository;
+use App\Services\AuthService;
+use App\Services\TwilioService;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -12,6 +16,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Sanctum\Sanctum;
+use Mockery;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,7 +33,7 @@ final class UserAuthenticationTest extends TestCase
     protected User $user;
 
     #[Before]
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         Artisan::call('migrate:fresh --seed');
@@ -48,6 +54,11 @@ final class UserAuthenticationTest extends TestCase
     #[Test]
     public function testUserRegistersSuccessfully()
     {
+        $twilioMock = Mockery::mock(TwilioService::class);
+        $twilioMock->shouldReceive('sendVerificationCode')
+            ->andReturn(true);
+        $this->app->instance('App\Services\TwilioService', $twilioMock);
+
         $response = $this->postJson("api/auth/register", $data = self::getUserData());
 
         $response->assertStatus(Response::HTTP_OK);
@@ -70,15 +81,19 @@ final class UserAuthenticationTest extends TestCase
     #[Test]
     public function testUserRegistersViaSocialSuccessfully()
     {
+        $twilioMock = Mockery::mock(TwilioService::class);
+        $twilioMock->shouldReceive('sendVerificationCode')
+            ->andReturn(true);
+        $this->app->instance('App\Services\TwilioService', $twilioMock);
 
-        $response = $this->postJson("api/auth/register", $data = array_merge(self::getUserData(),[
+        $response = $this->postJson("api/auth/register", $data = array_merge(self::getUserData(), [
             'loginType' => 'google',
             'socialLoginId' => '90532532'
         ]));
 
-        $this->assertDatabaseHas('providers',[
-           'provider_id' => $data['socialLoginId'],
-           'provider' => $data['loginType']
+        $this->assertDatabaseHas('providers', [
+            'provider_id' => $data['socialLoginId'],
+            'provider' => $data['loginType']
         ]);
 
         $response->assertStatus(Response::HTTP_OK);
@@ -99,20 +114,25 @@ final class UserAuthenticationTest extends TestCase
     }
 
 
-   public function testUserWhenRegisteredWithPhotoItUploadsToTheStorage()
+    public function testUserWhenRegisteredWithPhotoItUploadsToTheStorage()
     {
+         $twilioMock = Mockery::mock(TwilioService::class);
+        $twilioMock->shouldReceive('sendVerificationCode')
+            ->andReturn(true);
+        $this->app->instance('App\Services\TwilioService', $twilioMock);
 
-        $response = $this->postJson("api/auth/register", $user = array_merge(self::getUserData(),[
+
+        $response = $this->postJson("api/auth/register", $user = array_merge(self::getUserData(), [
             'profileImage' => UploadedFile::fake()->image('filename.png', 200, 200)->size(1024),
         ]));
 
+        foreach (Storage::disk()->allFiles('images') as $file) {
+            if (str_contains($file, $user['profileImage']->name)) {
+                Storage::assertExists($file);
+                break;
+            }
+        }
 
-       /*foreach (Storage::disk()->allFiles('images') as $file) {
-           if (str_contains($file, $user['profileImage']->name)) {
-               Storage::assertExists($file);
-               break;
-           }
-       }*/
 
         $response->assertStatus(Response::HTTP_OK);
     }
@@ -134,7 +154,7 @@ final class UserAuthenticationTest extends TestCase
     }
 
     #[Test]
-    public function testReturnsValidationErrorsOnFirstRequiredFieldsWhenRegisters() : void
+    public function testReturnsValidationErrorsOnFirstRequiredFieldsWhenRegisters(): void
     {
         $response = $this->postJson('api/auth/register', array_merge(self::getUserData(), [
             'firstname' => ''
@@ -152,7 +172,7 @@ final class UserAuthenticationTest extends TestCase
     }
 
     #[Test]
-    public function testLoginWithExistingUserSuccessfully() : void
+    public function testLoginWithExistingUserSuccessfully(): void
     {
         $user = User::factory()->create([
             'email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$'),
@@ -167,7 +187,7 @@ final class UserAuthenticationTest extends TestCase
         ]);
 
         $response->assertSimilarJson([
-           'user' => [
+            'user' => [
                 'id' => $user->id,
                 'firstname' => $user->firstname,
                 'lastname' => $user->lastname,
@@ -253,18 +273,21 @@ final class UserAuthenticationTest extends TestCase
     }
 
     #[Test]
-    public function testUserLogoutSuccessfully() : void
+    public function testUserLogoutSuccessfully(): void
     {
+        $user = User::factory()->create(['email' => fake()->regexify('^[A-Za-z0-9]{6}@(gmail\.com|email\.ua)$'), 'password' => Hash::make('123456789')]);
+        $user->userDetails()->create(['time_zone' => 'UTC']);;
+        Sanctum::actingAs($user, ['*']);
 
         $response = $this->postJson('api/auth/login', [
-            'email' => $this->user->email,
-            'password' => $this->user->password,
+            'email' => $user->email,
+            'password' => '123456789',
             'loginType' => 'NORMAL',
         ]);
 
         $headers = ['Authorization' => 'Bearer ' . $response->json('token')];
 
-        $response = $this->actingAs($this->user)->postJson(
+        $response = $this->actingAs($user)->postJson(
             uri: "api/auth/logout",
             headers: $headers
         );
@@ -273,12 +296,16 @@ final class UserAuthenticationTest extends TestCase
             'message' => 'Logged out successfully'
         ]);
 
+        self::assertDatabaseMissing('personal_access_tokens', [
+            'token' => $response->json('token')
+        ]);
+
         $response->assertStatus(Response::HTTP_OK);
 
     }
 
     #[Test]
-    public function testUserResetsPasswordSuccessfully() : void
+    public function testUserResetsPasswordSuccessfully(): void
     {
 
         $token = app(PasswordBroker::class)->createToken($this->user);
@@ -306,7 +333,7 @@ final class UserAuthenticationTest extends TestCase
     }
 
     #[Test]
-    public function testCannotResetPasswordWithNoToken() : void
+    public function testCannotResetPasswordWithNoToken(): void
     {
 
         $new_password = 'testPassword';
@@ -349,10 +376,10 @@ final class UserAuthenticationTest extends TestCase
             'email' => $user->email,
             'password' => '12345678',
             'loginType' => 'NORMAL',
-            'deviceId' => implode(',',$user->userDevices->pluck('id')->toArray())
+            'deviceId' => implode(',', $user->userDevices->pluck('id')->toArray())
         ]);
 
-        $this->assertDatabaseHas('user_devices',[
+        $this->assertDatabaseHas('user_devices', [
             'user_id' => $user->id,
             'device_id' => $data['device_id'],
             'device_type' => $data['device_type']
@@ -363,12 +390,12 @@ final class UserAuthenticationTest extends TestCase
     }
 
     #[After]
-    public function tearDown() : void
+    public function tearDown(): void
     {
+        Storage::disk('local')->deleteDirectory('images');
+
         parent::tearDown();
 
-        /*Storage::disk('local')->deleteDirectory('/images');*/
     }
-
-
 }
+

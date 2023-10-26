@@ -107,7 +107,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
             ->get();
     }
 
-    public function getUpcomingAppointmentsForTeacherByDayOfWeek(int $teacherId, int $dayOfWeek): Collection|null
+    public function getUpcomingAppointmentsForTeacherByDayOfWeekNumber(int $teacherId, int $dayOfWeek): Collection|null
     {
         $time = $this->getCurrentDateTime();
         return Appointment::where('teacher_id', $teacherId)

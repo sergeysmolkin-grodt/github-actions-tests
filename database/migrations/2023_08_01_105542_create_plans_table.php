@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->float('price')->unsigned();
+            $table->decimal('price')->unsigned();
             $table->string('type');
             $table->integer('count_sessions')->unsigned();
             $table->timestamps();

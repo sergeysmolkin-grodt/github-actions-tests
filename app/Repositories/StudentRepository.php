@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\DataTransferObjects\StudentRemindersOptionsData;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\StudentOptions;
+use App\Models\StudentRemindersOptions;
 use App\Models\User;
 use App\Models\CompanySubscription;
 use App\Models\UserDetails;
@@ -70,7 +72,7 @@ class StudentRepository implements StudentRepositoryInterface
 
     private function updateCompanySubscription($user, array $studentData): void
     {
-        if (!$user->studentOptions->has_free_recurring_sessions_for_company || !$studentData['plan_id']) {
+        if (!$user->studentOptions->has_free_recurring_sessions_for_company || ! $studentData['plan_id']) {
             return;
         }
 
@@ -94,5 +96,48 @@ class StudentRepository implements StudentRepositoryInterface
     public function delete(string $id) : bool
     {
         return $this->userModel->findOrFail($id)->delete();
+    }
+
+    public function createStudentOptions(int $userId): StudentOptions
+    {
+        return StudentOptions::create([
+            'user_id' => $userId,
+        ]);
+    }
+
+    public function destroyStudentOptions(int $userId): bool
+    {
+        return StudentOptions::where('user_id', $userId)->delete();
+    }
+
+    public function createStudentRemindersOptions(int $userId): StudentRemindersOptions
+    {
+        return StudentRemindersOptions::create([
+            'user_id' => $userId,
+        ]);
+    }
+
+    public function getUserWithStudentOptions(string $id): User|null
+    {
+        return $this->userModel->with(['userDetails', 'studentOptions'])->find($id);
+    }
+
+    public function getRemindersOptions(int $userId): ?StudentRemindersOptions
+    {
+        return StudentRemindersOptions::where('user_id', $userId)->first();
+    }
+
+    public function setRemindersOptions(StudentRemindersOptionsData $data): void
+    {
+        StudentRemindersOptions::updateOrCreate(
+            ['user_id' => $data->user_id],
+            [
+                'has_email_10_minutes_zoom_data' => $data->has_email_10_minutes_zoom_data,
+                'has_whatsapp_30_minutes' => $data->has_whatsapp_30_minutes,
+                'has_whatsapp_5_minutes' => $data->has_whatsapp_5_minutes,
+                'has_whatsapp_3_hours' => $data->has_whatsapp_3_hours,
+                'has_ivr_2_5_minutes' => $data->has_ivr_2_5_minutes
+            ]
+        );
     }
 }

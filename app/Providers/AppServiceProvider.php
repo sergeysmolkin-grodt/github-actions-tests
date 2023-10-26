@@ -4,11 +4,13 @@ namespace App\Providers;
 
 use App\Interfaces\AppointmentRepositoryInterface;
 use App\Interfaces\AutoScheduleRepositoryInterface;
+use App\Interfaces\TeacherRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Models\Subscription;
 use App\Repositories\AppointmentRepository;
 use App\Repositories\AutoScheduleRepository;
 use App\Repositories\CompanyRepository;
+use App\Repositories\TeacherRepository;
 use App\Repositories\UserRepository;
 use App\Services\ZoomService;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(StudentRepositoryInterface::class, StudentRepository::class);
         $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
         $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
+        $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class);
+
     }
 
     /**

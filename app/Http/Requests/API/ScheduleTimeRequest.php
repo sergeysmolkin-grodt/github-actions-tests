@@ -4,7 +4,7 @@ namespace App\Http\Requests\API;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ScheduleTimeRequest extends IfalApiRequest
+class ScheduleTimeRequest extends FormRequest
 {
 
     /**
@@ -35,8 +35,7 @@ class ScheduleTimeRequest extends IfalApiRequest
             'timeDetails' => 'required|array',
             'timeDetails.*.teacherId' => 'required|integer',
             'timeDetails.*.day' => 'required|string|in:monday,tuesday,wednesday,thursday,friday,saturday,sunday',
-            'timeDetails.*.time' => 'required|string',
-            'userId' => 'required|int'
+            'timeDetails.*.time' => 'required|string'
         ];
     }
 }

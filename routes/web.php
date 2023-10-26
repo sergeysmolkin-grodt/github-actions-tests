@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Panel\ChartController;
+use App\Http\Controllers\Panel\Reports\ReferralController;
 use App\Http\Controllers\Panel\TeacherAvailabilityController;
 use App\Http\Controllers\Panel\TeacherAvailabilityExceptionController;
 use App\Http\Controllers\Panel\TeacherOptionsController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Auth\OAuthController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Panel\CompanyController;
 use App\Http\Controllers\Panel\Management\ReviewController;
+use App\Http\Controllers\Panel\Management\VideoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +45,8 @@ Route::group(['middleware' => ['auth:sanctum']],  function() {
     Route::post('/teacher/availabilities/exceptions/delete', [TeacherAvailabilityExceptionController::class, 'delete']);
     Route::post('/teacher/availability/holidays', [TeacherAvailabilityExceptionController::class, 'storeHoliday']);
     Route::resource('/management/review', ReviewController::class);
+    Route::resource('/management/video', VideoController::class);
+    Route::resource('/reports/referrals', ReferralController::class);
 });
 
 

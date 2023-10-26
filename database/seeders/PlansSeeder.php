@@ -17,7 +17,7 @@ class PlansSeeder extends Seeder
         DB::table('plans')->insert([
             [
                 'name' => '2 Sessions a week - One month',
-                'price' => 2,
+                'price' => 49,
                 'type' => 'WEEKLY_2',
                 'count_sessions' => 8,
                 'created_at' => now(),
@@ -25,7 +25,7 @@ class PlansSeeder extends Seeder
             ],
             [
                 'name' => '3 Sessions a week - One month',
-                'price' => 3,
+                'price' => 60,
                 'type' => 'WEEKLY_3',
                 'count_sessions' => 12,
                 'created_at' => now(),
@@ -33,7 +33,7 @@ class PlansSeeder extends Seeder
             ],
             [
                 'name' => '4 Sessions a week - One month',
-                'price' => 4,
+                'price' => 76,
                 'type' => 'WEEKLY_4',
                 'count_sessions' => 16,
                 'created_at' => now(),
@@ -41,7 +41,7 @@ class PlansSeeder extends Seeder
             ],
             [
                 'name' => '5 Sessions a week - One month',
-                'price' => 5,
+                'price' => 90,
                 'type' => 'WEEKLY_5',
                 'count_sessions' => 20,
                 'created_at' => now(),

@@ -26,9 +26,9 @@ class StudentAutoScheduleTimeFactory extends Factory
         return [
             'student_id' => $student->id,
             'teacher_id' => $teacher->id,
-            'day' => $this->faker->date,
+            'day' => strtolower($this->faker->dayOfWeek),
             'time' => $this->faker->time,
-            'scheduled_date' => $this->faker->time(format: 'Y-m-d H:i:s')
+            'scheduled_date' => $this->faker->date,
         ];
     }
 }

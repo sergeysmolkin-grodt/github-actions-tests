@@ -5,7 +5,7 @@ namespace App\Http\Requests\Web;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
 
-class StoreReview extends FormRequest
+class CreateReviewRequest extends FormRequest
 {
     /**
      * Prepare the data for validation.
@@ -34,7 +34,7 @@ class StoreReview extends FormRequest
     public function rules()
     {
         return [
-            'review_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'review' => 'required|string',

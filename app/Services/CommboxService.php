@@ -9,12 +9,28 @@ use Illuminate\Support\Facades\Log;
 
 class CommboxService
 {
-    public function sendMessage(string $phoneNumber, string $language)
+    public function sendMessage(string $phoneNumber, string $templateName, ?string $language = 'en', array $parameters = [])
     {
+        $components = [];
         $subStreamID = config('services.commbox.substream_id.hw');
         if (substr($phoneNumber, 0, 2) == '34' || substr($phoneNumber, 0, 2) == '+3'):
             $subStreamID = config('services.commbox.substream_id.es');
         endif;
+
+        if (! empty($parameters)) {
+            $components = [
+                [
+                    "type" => "body",
+                    "parameters" => []
+                ]
+            ];
+            foreach ($parameters as $parameter) {
+                $components[0]['parameters'][] = [
+                    "type" => "text",
+                    "text" => "*' . $parameter . '*"
+                ];
+            }
+        }
 
         $data = [
             'data' => [
@@ -22,32 +38,43 @@ class CommboxService
                     'template_data' => [
                         'to' => $phoneNumber,
                         'template' => [
-                            'name' => config('services.commbox.templates.unbooked_sessions'),
+                            'name' => $templateName,
                             'language' => [
                                 'code' => $language
                             ],
-                            'components' => []
+                            'components' => $components
                         ]
                     ],
                     'object_data' => [
                         'SubStreamId' => $subStreamID,
-                        'StatusId' => config('services.commbox.status_id'),
-                        'Content' => [],
-                        "ManagerId" => 23669884,
-                        "createChildObject" => true
+                        'createChildObject' => true,
+                        'StatusId' => (int) config('services.commbox.status_id'),
                     ]
                 ]
             ]
         ];
 
         // ToDo: Find out why requests through the HTTP client do not work
-        $response = Http::withHeaders([
-            "Authorization" => "Bearer e65b185d54634a87a9a06f929bcf9824",
-            "Content-Type" => "application/json",
-        ])->post(config('services.commbox.api_url') . "whatsapp/sendtemplatedmessage/" . config('services.commbox.app_id'), json_encode($data));
 
-        if (! $response->successful()) {
-            Log::error($response->body());
+        $url = config('services.commbox.api_url') . "whatsapp/sendtemplatedmessage/" . config('services.commbox.app_id');
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bearer " . config('services.commbox.api_key')
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = json_decode(curl_exec($curl));
+        curl_close($curl);
+
+        if ($response->status !== 200) {
+            Log::error(serialize($response));
         }
 
         return $response;

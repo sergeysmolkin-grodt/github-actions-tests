@@ -82,4 +82,13 @@ class User extends Authenticatable
         return $this->hasMany(Provider::class,'user_id', 'id');
     }
 
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+  
+    public function studentRemindersOptions(): HasOne
+    {
+        return $this->hasOne(StudentRemindersOptions::class);
+    }
 }

@@ -453,7 +453,7 @@
                                                             <th  align="left">
                                                                 Status Code :
                                                             </th>
-                                                            <td width="85%" class="purchase_item"><span class="f-fallback">{{$messageResponse->status()}}</span></td>
+                                                            <td width="85%" class="purchase_item"><span class="f-fallback">{{$messageResponse->status}}</span></td>
                                                         </tr>
                                                         <tr>
                                                             <th  align="left">
@@ -465,19 +465,19 @@
                                                             <th  align="left">
                                                                 Message :
                                                             </th>
-                                                            <td width="85%" class="purchase_item"><span class="f-fallback">' . $Message . '</span></td>
+                                                            <td width="85%" class="purchase_item"><span class="f-fallback">{{$messageResponse->description}}</span></td>
                                                         </tr>
                                                         <tr>
                                                             <th  align="left">
                                                                 Date Time :
                                                             </th>
-                                                            <td width="85%" class="purchase_item"><span class="f-fallback">' . $Time . '</span></td>
+                                                            <td width="85%" class="purchase_item"><span class="f-fallback">{{$messageResponse->response_time}}</span></td>
                                                         </tr>
                                                         <tr>
                                                             <th  align="left">
                                                                 Phone :
                                                             </th>
-                                                            <td width="85%" class="purchase_item"><span class="f-fallback">' . $phone . '</span></td>
+                                                            <td width="85%" class="purchase_item"><span class="f-fallback">{{$phoneNumber}}</span></td>
                                                         </tr>
                                                     </table>
                                                 </td>

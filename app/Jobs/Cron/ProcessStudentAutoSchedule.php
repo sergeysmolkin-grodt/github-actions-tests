@@ -5,41 +5,27 @@ namespace App\Jobs\Cron;
 use App\DataTransferObjects\AppointmentData;
 use App\Exceptions\CouldNotBookAppointment;
 use App\Interfaces\AutoScheduleRepositoryInterface;
-use App\Mail\Appointments\SessionScheduled;
 use App\Mail\Appointments\FailedSendingMessageViaCommbox;
 use App\Mail\Appointments\UnbookedSessions;
-use App\Repositories\AutoScheduleRepository;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use \Illuminate\Http\Request;
+use App\Models\User;
 use App\Services\AppointmentService;
 use App\Services\CommboxService;
+use App\Traits\DateTimeTrait;
+use Illuminate\Bus\Queueable;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Http\Request;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
-use App\Traits\DateTimeTrait;
 use Illuminate\Support\Facades\Mail;
-use App\Models\User;
 
 class ProcessStudentAutoSchedule extends ProcessCronJob
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, DateTimeTrait;
-
-    private $requestData;
     private $studentId = null;
     private $counter = 0;
     private $booked = 0;
     private $totalNotBookedSloats = [];
-    /**
-     * Create a new job instance.
-     * @param Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->requestData = $request->all();
-    }
 
     /**
      * Execute the job.
@@ -140,10 +126,11 @@ class ProcessStudentAutoSchedule extends ProcessCronJob
         // Send unbooked Auto Schedule sessions to student WhatsApp number
         $messageResponse = $commboxService->sendMessage(
             phoneNumber: $phoneNumber,
+            templateName: config('services.commbox.templates.unbooked_sessions'),
             language: $userDetails->language
         );
 
-        if (! $messageResponse->successful()) {
+        if ($messageResponse->status !== 200) {
             Mail::to($student->email)->send(new FailedSendingMessageViaCommbox(
                 messageResponse: $messageResponse,
                 messageType: 'wp_cancel_session_by_admin_panel_new',

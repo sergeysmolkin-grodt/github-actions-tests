@@ -9,16 +9,14 @@ use Carbon\Carbon;
 trait DateTimeTrait
 {
 
-    public function convertDateTimeToTimeZone(string $dateTimeString, string $toTimeZone, string $fromTimeZone = 'UTC'): string
+    public function convertDateTimeToTimeZone(string $dateTimeString, string $toTimeZone, string $fromTimeZone = 'UTC'): Carbon
     {
-        $dateTime = Carbon::createFromFormat('Y-m-d H:i', $dateTimeString, $fromTimeZone);
-
-        return $dateTime->setTimezone($toTimeZone)->toDateTimeString();
+        return Carbon::parse($dateTimeString, $fromTimeZone)->setTimezone($toTimeZone);
     }
 
     public function getDMYCommaFormat(string $date): string
     {
-        return \Carbon\Carbon::parse($date)->format('d M, Y');
+        return Carbon::parse($date)->format('d M, Y');
     }
 
     public function addMinutesToDateTime(string $dateTime, int $minutes): string
@@ -31,12 +29,12 @@ trait DateTimeTrait
 
     public function getDMYSlashFormat($date): string
     {
-        return \Carbon\Carbon::parse($date)->format('d/m/Y');
+        return Carbon::parse($date)->format('d/m/Y');
     }
 
     public function getYMDHyphenFormat($date): string
     {
-        return \Carbon\Carbon::parse($date)->format('Y-m-d');
+        return Carbon::parse($date)->format('Y-m-d');
     }
 
     public function getCarbonInstance(string $dateTime): Carbon
@@ -78,6 +76,18 @@ trait DateTimeTrait
     {
         $carbonDate = Carbon::createFromFormat('Y-m-d', $date);
         return $carbonDate->format('N');
+    }
+
+    public function getHiTimeFormat($date): string
+    {
+        return Carbon::parse($date)->format('H:i');
+
+    }
+
+    public function getDayNumberByName(string $day): int
+    {
+        $dayOfWeek = Carbon::parse($day);
+        return $dayOfWeek->dayOfWeek;
     }
 
     public function getTimestamp(string $date): int

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('student_id')->unsigned();
             $table->bigInteger('teacher_id')->unsigned();
-            $table->string('day');
+            $table->enum('day', ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']);
             $table->string('time');
             $table->timestamp('scheduled_date');
             $table->date('auto_schedule_booking_expiry')->nullable()->default(null);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\DataTransferObjects\ReferralData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\LoginRequest;
 use App\Http\Requests\API\RegisterRequest;
@@ -10,7 +11,8 @@ use App\Http\Requests\API\SMSVerificationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\UserDetails;
-use App\Services\TwilloService;
+use App\Repositories\ReferralRepository;
+use App\Services\TwilioService;
 use Exception;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
@@ -26,14 +28,12 @@ class UserAuthenticationController extends Controller
 {
     use \App\Traits\FileTrait;
 
-    protected $authService;
-    protected TwilloService $twilloService;
-
-    public function __construct(AuthService $authService, TwilloService $twilloService)
-    {
+    public function __construct(
+        protected AuthService $authService,
+        protected TwilioService $twilioService,
+        protected ReferralRepository $referralRepository
+    ) {
         parent::__construct();
-        $this->authService = $authService;
-        $this->twilloService = $twilloService;
     }
 
     public function register(RegisterRequest $request): JsonResponse
@@ -47,6 +47,21 @@ class UserAuthenticationController extends Controller
         // Create User data
         if (($user = $this->authService->createUserData($validated)) === null) {
             return $this->respondError(__('The user has not been created'));
+        }
+
+        // If user has referral
+        if (isset($validated['referralId'])) {
+            // Add user to referral table
+            $referral = new ReferralData(
+                userId: $user->id,
+                referralId: $validated['referralId']
+            );
+
+            try {
+                $this->referralRepository->create($referral);
+            } catch (Exception $e) {
+                Log::error($e->getMessage());
+            }
         }
 
         // If signup via social
@@ -68,7 +83,7 @@ class UserAuthenticationController extends Controller
         $user->assignRole($validated['role']);
 
         try {
-            //$this->twilloService->sendVerificationCode($user->userDetails->mobile);
+            $this->twilioService->sendVerificationCode($user->userDetails->mobile);
         } catch (Exception $e) {
             Log::error("Error while sending SMS: " . $e->getMessage());
             return $this->respondError('An error occurred while sending the verification code.');
@@ -106,7 +121,7 @@ class UserAuthenticationController extends Controller
 
     public function logout(Request $request): JsonResponse
     {
-        $request->user()->tokens()->where('id', auth()->id())->delete();
+        $request->user()->currentAccessToken()->delete();
 
         return $this->respondWithSuccess(['message' => 'Logged out successfully']);
     }
@@ -153,7 +168,7 @@ class UserAuthenticationController extends Controller
         $data = $request->validate(['phone_number' => 'required|regex:/^[\+0-9]+$/|min:10|max:17']);
 
         try {
-            $this->twilloService->sendVerificationCode($data['phone_number']);
+            $this->twilioService->sendVerificationCode($data['phone_number']);
 
         } catch (Exception $e) {
             Log::error("Error while sending SMS: " . $e->getMessage());
@@ -168,7 +183,7 @@ class UserAuthenticationController extends Controller
     {
         $data = $request->validated();
         try {
-            $this->twilloService->verifyCode($data['phone_number'], $data['code']);
+            $this->twilioService->verifyCode($data['phone_number'], $data['code']);
 
             $this->userRepository->verifyUserPhoneNumber($data['phone_number']);
         } catch (Exception $e) {

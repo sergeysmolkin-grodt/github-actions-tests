@@ -128,8 +128,8 @@
 
                 <li class="has-sub is-shown"><a class="menu-item" href="#" data-i18n="nav.page_layouts.3_columns.main">Video</a>
                     <ul class="menu-content" style="">
-                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_video' && \Illuminate\Support\Facades\Request::segment(3) == 'add'): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_video/add') ?>" data-i18n="nav.dash.ecommerce">Add New</a></li>
-                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_video' && \Illuminate\Support\Facades\Request::segment(3) == ''): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('admin/teacher_video/') ?>" data-i18n="nav.dash.ecommerce">View All</a></li>
+                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_video' && \Illuminate\Support\Facades\Request::segment(3) == 'add'): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('/management/video/create') ?>" data-i18n="nav.dash.ecommerce">Add New</a></li>
+                        <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'teacher_video' && \Illuminate\Support\Facades\Request::segment(3) == ''): echo 'active'; endif; ?>"><a class="menu-item" href="<?= url('/management/video/') ?>" data-i18n="nav.dash.ecommerce">View All</a></li>
                     </ul>
                 </li>
 
@@ -148,7 +148,7 @@
     </ul>
 
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-        <li class=" nav-item"><a href="<?= url('admin/appointments') ?>"><i class="icon-graph"></i></i><span class="menu-title" data-i18n="nav.dash.main">Reports</span></a>
+        <li class=" nav-item"><a href="<?= url('reports') ?>"><i class="icon-graph"></i></i><span class="menu-title" data-i18n="nav.dash.main">Reports</span></a>
             <ul class="menu-content" style="margin-left: -15px">
                 <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'customers' && \Illuminate\Support\Facades\Request::segment(3) == 'getAllCustomersUnsubscribed'): echo 'active'; endif; ?> nav-item"><a href="<?= url('admin/customers/getAllCustomersUnsubscribed') ?>"><span class="menu-title" data-i18n="nav.dash.main">Not purchased</span></a></li>
                 <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'customers' && \Illuminate\Support\Facades\Request::segment(3) == 'membershipCancelledReason'): echo 'active'; endif; ?> nav-item"><a href="<?= url('admin/customers/membershipCancelledReason') ?>"><span class="menu-title" data-i18n="nav.dash.main" title="Membership canceled reasons">Membership canceled <br> reasons</span></a></li>
@@ -159,7 +159,7 @@
                 <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'customers' && \Illuminate\Support\Facades\Request::segment(3) == 'studentWithNoTrialClass'): echo 'active'; endif; ?> nav-item"><a href="<?= url('admin/customers/studentWithNoTrialClass') ?>"><span class="menu-title" data-i18n="nav.dash.main">Without trial lesson</span></a></li>
                 <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'customers' && \Illuminate\Support\Facades\Request::segment(3) == 'auto_schedule_users'): echo 'active'; endif; ?> nav-item"><a href="<?= url('admin/customers/auto_schedule_users') ?>"><span class="menu-title" data-i18n="nav.dash.main">Auto Scheduled Users</span></a></li>
                 <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'customers' && \Illuminate\Support\Facades\Request::segment(3) == 'getAllDeletedCustomers'): echo 'active'; endif; ?> nav-item"><a href="<?= url('admin/customers/getAllDeletedCustomers') ?>"><span class="menu-title" data-i18n="nav.dash.main">Deleted Users</span></a></li>
-                <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'referrals' && \Illuminate\Support\Facades\Request::segment(3) == 'view_referrals'): echo 'active'; endif; ?> nav-item"><a href="<?= url('admin/referrals/view_referrals') ?>"><span class="menu-title" data-i18n="nav.dash.main">Referrals</span></a></li>
+                <li class="<?php if(\Illuminate\Support\Facades\Request::segment(2) == 'referrals' && \Illuminate\Support\Facades\Request::segment(3) == 'referrals'): echo 'active'; endif; ?> nav-item"><a href="<?= url('reports/referrals') ?>"><span class="menu-title" data-i18n="nav.dash.main">Referrals</span></a></li>
             </ul>
         </li>
     </ul>

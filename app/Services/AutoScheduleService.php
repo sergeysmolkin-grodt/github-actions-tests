@@ -33,7 +33,7 @@ class AutoScheduleService
         return null;
     }
 
-    public function setAutoScheduleTime(array $requestData): void
+    public function setAutoScheduleTime(array $requestData, int $userId): void
     {
         if ( ! is_null($availabilityResponse = $this->checkAvailabilityAutoScheduleTimeSlots($requestData['timeDetails']))) {
             throw new CouldNotSetAutoScheduleTime($availabilityResponse);
@@ -42,7 +42,7 @@ class AutoScheduleService
         foreach($requestData['timeDetails'] as $timeDetail) {
 
             $createStudentAutoScheduleTimesResponse = $this->autoScheduleRepository->create(
-                studentId: Auth::user()->id,
+                studentId: $userId,
                 teacherId: $timeDetail['teacherId'],
                 day: $timeDetail['day'],
                 time: $timeDetail['time'],

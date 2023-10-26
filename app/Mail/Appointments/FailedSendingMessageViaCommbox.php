@@ -21,7 +21,7 @@ class FailedSendingMessageViaCommbox extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public readonly Response $messageResponse,
+        public readonly object $messageResponse,
         public readonly string $messageType,
         public readonly string $phoneNumber,
     )
@@ -45,7 +45,7 @@ class FailedSendingMessageViaCommbox extends Mailable
         return new Content(
             view: 'emails.appointments.failed_commbox',
             with: [
-                'commboxResponse' => $this->messageResponse,
+                'commboxResponse' => serialize($this->messageResponse),
                 'messageType' => $this->messageType,
                 'phoneNumber' => $this->phoneNumber
             ],

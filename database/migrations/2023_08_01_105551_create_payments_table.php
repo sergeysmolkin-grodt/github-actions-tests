@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigInteger('model_id')->unsigned();
             $table->string('model_type');
             $table->string('payment_method');
+            $table->json('transaction_data')->nullable();
             $table->date('payment_date');
             $table->float('amount')->unsigned();
             $table->string('status');

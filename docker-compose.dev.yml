@@ -4,7 +4,7 @@ version: "3"
 services:
   web:
     image: nginx
-    container_name: web_new_test
+    container_name: web_new
     ports:
       - "8082:80"
       - "442:443"
@@ -17,13 +17,13 @@ services:
       context: .
       target: development-stage
       dockerfile: docker/Dockerfile
-    container_name: app_new_test
+    container_name: app_new
     volumes:
       - ./:/var/www/html
 
   db:
     image: mysql:5.7
-    container_name: db_new_test
+    container_name: db_new
     ports:
       - "3307:3306"
     environment:
@@ -36,7 +36,7 @@ services:
 
   pma:
     image: phpmyadmin/phpmyadmin
-    container_name: pma_new_test
+    container_name: pma_new
     ports:
       - "8083:80"
     environment:

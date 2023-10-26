@@ -2,11 +2,13 @@
 
 namespace Tests\Integration\API\Controllers;
 
+use App\Jobs\Cron\ProcessStudentAutoSchedule;
 use App\Models\StudentAutoScheduleTime;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,17 +26,21 @@ final class AutoScheduleTest extends TestCase
     protected function setUp() : void
     {
         parent::setUp();
-
         Event::fake();
         Artisan::call('db:seed');
 
         $this->teacher = User::factory()->create()->assignRole('teacher');
-        $this->student = User::factory()->create()->assignRole('student');
+        $this->student = self::addStudentForAppointment();
+        Auth::login($this->student);
     }
 
     #[Test]
     public function testStoreAutoScheduleTimeSuccessfully()
     {
+        $mock = \Mockery::mock(ProcessStudentAutoSchedule::class);
+        $mock->shouldReceive('dispatch')->once();
+        $this->app->instance(ProcessStudentAutoSchedule::class, $mock);
+
         $response = $this->postAutoScheduleTimeAsUser($data = $this->getAutoScheduleData());
 
         foreach ($this->getAutoScheduleData()['timeDetails'] as $timeDetail) {
@@ -44,7 +50,6 @@ final class AutoScheduleTest extends TestCase
                 'time'           => $timeDetail['time'],
             ]);
         }
-
 
         self::assertDatabaseHas('student_auto_schedule_times',['student_id' => $data['userId']]);
         self::assertDatabaseHas('student_auto_schedule_times',['scheduled_date' => $data['autoScheduleDate']]);
@@ -74,7 +79,8 @@ final class AutoScheduleTest extends TestCase
     #[Test]
     public function testNonAuthUserCannotStoreAutoSchedule()
     {
-        $response = $this->postJson("api/auto-schedule-time/",$this->getAutoScheduleData());
+        Auth::logout();
+        $response = $this->postJson("api/auto-schedule-slots",$this->getAutoScheduleData());
 
         $response->assertJson(['message' => 'Unauthenticated.']);
     }
@@ -84,10 +90,13 @@ final class AutoScheduleTest extends TestCase
     {
         $autoSchedule = StudentAutoScheduleTime::factory()->create([
             'student_id' => $this->student->id,
-            'teacher_id' => $this->teacher->id
+            'teacher_id' => $this->teacher->id,
+            'scheduled_date' => now()->addDays(10)->format('Y-m-d'),
+            'day' => 'monday',
+            'time' => '12:00'
         ]);
 
-        $response = $this->actingAs($this->student)->putJson("api/auto-schedule-time/{$this->student->id}",$data = $this->getAutoScheduleData());
+        $response = $this->actingAs($this->student)->putJson("api/auto-schedule-slots/{$this->student->id}",$data = $this->getAutoScheduleData());
 
         foreach ($this->getAutoScheduleData()['timeDetails'] as $timeDetail) {
             self::assertDatabaseHas('student_auto_schedule_times',[
@@ -107,9 +116,12 @@ final class AutoScheduleTest extends TestCase
     #[Test]
     public function testNonAuthUserCannotUpdateAutoScheduleTime()
     {
-        $autoSchedule = StudentAutoScheduleTime::factory()->create(['student_id' => $this->student->id]);
+        Auth::logout();
+        $autoSchedule = StudentAutoScheduleTime::factory()->create([
+            'student_id' => $this->student->id,
+        ]);
 
-        $response = $this->putJson("api/auto-schedule-time/{$this->student->id}",$this->getAutoScheduleData());
+        $response = $this->putJson("api/auto-schedule-slots/{$this->student->id}",$this->getAutoScheduleData());
 
         $response->assertJson(['message' => 'Unauthenticated.']);
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
@@ -120,35 +132,35 @@ final class AutoScheduleTest extends TestCase
     {
         $autoSchedule = StudentAutoScheduleTime::factory()->create(['student_id' => $this->student->id]);
 
-        $response = $this->actingAs($this->student)->deleteJson("api/auto-schedule-time/{$this->student->id}");
+        $response = $this->actingAs($this->student)->deleteJson("api/auto-schedule-slots/{$this->student->id}");
 
         $response->assertJsonFragment(['Auto schedule removed successfully.']);
-
         self::assertDatabaseMissing('student_auto_schedule_times',$autoSchedule->toArray());
-
         $response->assertStatus(Response::HTTP_OK);
     }
 
     #[Test]
     public function testNonAuthUserCannotDestroyAutoSchedule()
-{
-    $autoSchedule = StudentAutoScheduleTime::factory()->create(['student_id' => $this->student->id]);
+    {
+        Auth::logout();
 
-    $response = $this->deleteJson("api/auto-schedule-time/{$this->student->id}");
+        $autoSchedule = StudentAutoScheduleTime::factory()->create(['student_id' => $this->student->id]);
 
-    $response->assertJson([
-        'message' => 'Unauthenticated.'
-    ]);
+        $response = $this->deleteJson("api/auto-schedule-slots/{$this->student->id}");
 
-    $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+        $response->assertJson([
+            'message' => 'Unauthenticated.'
+        ]);
 
-}
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+
+    }
 
     private function postAutoScheduleTimeAsUser(array $data, array $headers = []): TestResponse
     {
         return $this->actingAs($this->student)
             ->postJson(
-                uri: "api/auto-schedule-time",
+                uri: "api/auto-schedule-slots",
                 data: $data,
                 headers: array_merge([
                     'Accept-Language' => 'en',
