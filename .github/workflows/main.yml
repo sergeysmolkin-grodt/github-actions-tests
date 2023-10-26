@@ -50,17 +50,15 @@ jobs:
       - name: Set up Firebase keys and configuration
         run: |
           mkdir -p firebase-keys
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
+          printf "%s" "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
           echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> .env
           echo "FCM_API_URL=${{ secrets.FCM_API_URL }}" >> .env
           echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
           echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
         working-directory: .
 
-
-      - name: Verify firebase-keys directory and google-services.json file
+      - name: Check the contents of google-services.json
         run: |
-          ls -l firebase-keys
           cat firebase-keys/google-services.json
         working-directory: .
 
