@@ -38,6 +38,17 @@ jobs:
             echo "TWILIO_FROM=${{ secrets.TWILIO_FROM }}" >> .env
             echo "TWILIO_VERIFY_SID=${{ secrets.TWILIO_VERIFY_SID }}" >> .env
 
+            echo "IS_ZOOM_ENABLE=${{ secrets.IS_ZOOM_ENABLE }}" >> .env
+            echo "ZOOM_API_KEY=${{ secrets.ZOOM_API_KEY }}" >> .env
+            echo "ZOOM_API_SECRET=${{ secrets.ZOOM_API_SECRET }}" >> .env
+            echo "ZOOM_API_URL=${{ secrets.ZOOM_API_URL }}" >> .env
+            echo "ZOOM_USER_ID=${{ secrets.ZOOM_USER_ID }}" >> .env
+            echo "ZOOM_ACCOUNT_ID=${{ secrets.ZOOM_ACCOUNT_ID }}" >> .env
+            echo "ZOOM_ACCESS_TOKEN_ENDPOINT=${{ secrets.ZOOM_ACCESS_TOKEN_ENDPOINT }}" >> .env
+            echo "ZOOM_GRANT_TYPE=${{ secrets.ZOOM_GRANT_TYPE }}" >> .env
+            echo "ZOOM_APP_DOWNLOAD_LINK=${{ secrets.ZOOM_APP_DOWNLOAD_LINK }}" >> .env
+            echo "ZOOM_MICROPHONE_TEST_LINK=${{ secrets.ZOOM_MICROPHONE_TEST_LINK }}" >> .env
+
       - name: Generate app key
         run: php artisan key:generate
 
