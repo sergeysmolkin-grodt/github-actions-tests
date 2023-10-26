@@ -45,6 +45,8 @@ final class AppointmentTest extends TestCase
                 'date' => '2020-12-30',
         ]);
 
+        Auth::login($this->user);
+
         $response = $this->postAppointmentAsUser($appointment);
 
         $response->assertJson([
@@ -179,7 +181,7 @@ final class AppointmentTest extends TestCase
 
         $reminder = Reminder::where('model_id', $appointment['id'])->get();
 
-        $this->assertCount(count(config('app.appointment_reminders')), $reminder);
+        $this->assertCount(count(config('reminders.reminders.appointment')), $reminder);
 
         self::assertEquals($appointment['id'],$response->json('appointmentId'));
 

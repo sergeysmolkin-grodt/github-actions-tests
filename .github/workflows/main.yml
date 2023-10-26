@@ -30,7 +30,7 @@ jobs:
       - name: Clear config
         run: php artisan config:clear
 
-      - name: Copy .env.example to .env and add secrets
+      - name: Copy .env.example to .env and add secrets credentials
         run: |
             cp .env.example .env
             echo "TWILIO_SID=${{ secrets.TWILIO_SID }}" >> .env
@@ -48,6 +48,11 @@ jobs:
             echo "ZOOM_GRANT_TYPE=${{ secrets.ZOOM_GRANT_TYPE }}" >> .env
             echo "ZOOM_APP_DOWNLOAD_LINK=${{ secrets.ZOOM_APP_DOWNLOAD_LINK }}" >> .env
             echo "ZOOM_MICROPHONE_TEST_LINK=${{ secrets.ZOOM_MICROPHONE_TEST_LINK }}" >> .env
+
+            echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> .env
+            echo "FCM_API_URL=${{ secrets.FCM_API_URL }}" >> .env
+            echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
+            echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
 
       - name: Generate app key
         run: php artisan key:generate
