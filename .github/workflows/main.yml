@@ -54,7 +54,8 @@ jobs:
           echo "FCM_PROJECT_ID=${{ secrets.FCM_PROJECT_ID }}" >> .env
           echo "FCM_API_URL=${{ secrets.FCM_API_URL }}" >> .env
           echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
-          echo "FIREBASE_KEY_PATH=./firebase-keys/google-services.json" >> .env
+          echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
+        working-directory: .
 
       - name: Generate app key
         run: php artisan key:generate
