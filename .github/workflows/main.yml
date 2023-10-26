@@ -52,7 +52,7 @@ jobs:
             echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
 
       - name: Set up Firebase keys and configuration
-        run:  |
+        run: |
             mkdir -p firebase-keys
             printf "%s" "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
         working-directory: .
