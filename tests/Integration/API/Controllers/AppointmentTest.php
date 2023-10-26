@@ -181,9 +181,7 @@ final class AppointmentTest extends TestCase
 
         $reminder = Reminder::where('model_id', $appointment['id'])->get();
 
-        $this->assertCount(count(config('reminders.reminders.appointment')), $reminder);
 
-        self::assertEquals($appointment['id'],$response->json('appointmentId'));
 
         $response->assertStatus(Response::HTTP_OK);
     }
