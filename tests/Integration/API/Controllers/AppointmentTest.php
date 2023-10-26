@@ -8,12 +8,14 @@ use App\Models\AppointmentDetails;
 use App\Models\AvailabilityException;
 use App\Models\Reminder;
 use App\Models\User;
+use App\Services\AppointmentService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Testing\TestResponse;
 use Laravel\Sanctum\Sanctum;
+use Mockery;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
@@ -139,6 +141,10 @@ final class AppointmentTest extends TestCase
     #[Test]
     public function testStoreAppointmentWithAllTheNeedsSuccessfully() {
         Mail::fake();
+
+        $mock = Mockery::mock(AppointmentService::class)->makePartial();
+        $mock->shouldReceive('sendPushNotificationsToTeacher')->once();
+        $this->app->instance(AppointmentService::class, $mock);
 
         $appointment = array_merge(
             TestCase::getAppointmentData($this->teacher,$this->user), [
