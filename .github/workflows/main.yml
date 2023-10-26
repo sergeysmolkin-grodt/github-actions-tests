@@ -57,6 +57,12 @@ jobs:
           echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
         working-directory: .
 
+      - name: Verify firebase-keys directory and google-services.json file
+        run: |
+          ls -l firebase-keys
+          cat firebase-keys/google-services.json
+        working-directory: .
+
       - name: Generate app key
         run: php artisan key:generate
 
