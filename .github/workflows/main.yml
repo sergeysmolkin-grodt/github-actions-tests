@@ -22,7 +22,7 @@ jobs:
         uses: php-actions/composer@v6
         with:
           args: --ignore-platform-req=ext-gd
-            --ignore-platform-req=ext-zip
+                --ignore-platform-req=ext-zip
 
       - name: Link to the storage
         run: php artisan storage:link
@@ -30,8 +30,13 @@ jobs:
       - name: Clear config
         run: php artisan config:clear
 
-      - name: Copy .env
-        run: cp .env.example .env
+      - name: Copy .env.example to .env and add secrets
+        run: |
+            cp .env.example .env
+            echo "TWILIO_SID=${{ secrets.TWILIO_SID }}" >> .env
+            echo "TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}" >> .env
+            echo "TWILIO_FROM=${{ secrets.TWILIO_FROM }}" >> .env
+            echo "TWILIO_VERIFY_SID=${{ secrets.TWILIO_VERIFY_SID }}" >> .env
 
       - name: Generate app key
         run: php artisan key:generate
@@ -48,5 +53,9 @@ jobs:
         run: php artisan test --filter Integration
         continue-on-error: false
 
-      - name: Text
-        run: echo ${{ steps.tests.outputs.result }}
+      - name: Test result
+        run: |
+          echo 'smth'
+
+
+
