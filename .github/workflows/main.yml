@@ -51,14 +51,15 @@ jobs:
             echo "FCM_SCOPE=${{ secrets.FCM_SCOPE }}" >> .env
             echo "FIREBASE_KEY_PATH=${{ secrets.FIREBASE_KEY_PATH }}" >> .env
 
-      - name: Copy google-services.json to firebase-keys
+      - name: Set up Firebase keys and configuration
         run: |
-            mkdir firebase-keys
-            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
+            mkdir -p firebase-keys
+            printf "%s" "${{ secrets.GOOGLE_SERVICES_JSON }}" > firebase-keys/google-services.json
+        working-directory: .
 
       - name: Check the contents of google-services.json
         run: |
-          cat firebase-keys/google-services.json
+             cat firebase-keys/google-services.json
         working-directory: .
 
       - name: Generate app key
