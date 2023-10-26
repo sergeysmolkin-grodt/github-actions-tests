@@ -12,7 +12,6 @@ use App\Services\AppointmentService;
 use App\Traits\DateTimeTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Requests\API\IfalApiRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
@@ -26,7 +25,6 @@ class AppointmentController extends Controller
     )
     {
         parent::__construct();
-        //хgvvg
     }
     /**
      * Display a listing of the resource.
@@ -43,13 +41,15 @@ class AppointmentController extends Controller
     {
         $validated = $request->validated();
 
+        $appointmentDateTime = $this->convertDateTimeToTimeZone("{$validated['date']} {$validated['startTime']}", 'UTC', config('app.timezone'));
+
         try {
             $appointmentId = $this->appointmentService->bookAppointment(
                 new AppointmentData(
-                    userId: Auth::user()->id,
+                    userId: $this->userId,
                     teacherId: $validated['teacherId'],
-                    date: $validated['date'],
-                    startTime: $validated['startTime'],
+                    date: $appointmentDateTime->format('Y-m-d'),
+                    startTime: $appointmentDateTime->format('H:i:s'),
                     isAutoScheduleSession: false
                 )
             );
@@ -94,10 +94,9 @@ class AppointmentController extends Controller
         ]);
     }
 
-    public function cancelAutoScheduled(IfalApiRequest $request): JsonResponse
+    public function cancelAutoScheduled(): JsonResponse
     {
-        $validated = $request->validated();
-        $studentId = $validated['userId'];
+        $studentId = $this->userId;
 
         try {
             $this->appointmentService->cancelAutoScheduledAppointments(
