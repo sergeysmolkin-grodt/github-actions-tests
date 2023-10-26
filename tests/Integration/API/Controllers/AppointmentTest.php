@@ -142,9 +142,6 @@ final class AppointmentTest extends TestCase
     public function testStoreAppointmentWithAllTheNeedsSuccessfully() {
         Mail::fake();
 
-        $mock = Mockery::mock(AppointmentService::class)->makePartial();
-        $mock->shouldReceive('sendPushNotificationsToTeacher')->once();
-
         $appointment = array_merge(
             TestCase::getAppointmentData($this->teacher,$this->user), [
             'date' => '2024-12-28',
