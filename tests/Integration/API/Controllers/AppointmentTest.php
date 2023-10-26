@@ -144,7 +144,6 @@ final class AppointmentTest extends TestCase
 
         $mock = Mockery::mock(AppointmentService::class)->makePartial();
         $mock->shouldReceive('sendPushNotificationsToTeacher')->once();
-        $this->app->instance(AppointmentService::class, $mock);
 
         $appointment = array_merge(
             TestCase::getAppointmentData($this->teacher,$this->user), [
